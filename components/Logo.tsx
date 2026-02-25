@@ -18,7 +18,13 @@ function Logo({ fontSize = "text-2xl", iconSize = 20 }: Props) {
       )}
     >
       <div className="p-2 bg-linear-to-r from-emerald-500 to-emerald-600 rounded-xl">
-        <SquareDashedMousePointer size={iconSize} />
+        <SquareDashedMousePointer size={iconSize} className="stroke-white" />
+      </div>
+      <div>
+        <span className="bg-clip-text bg-linear-to-r from-emerald-500 to-emerald-600 text-transparent">
+          Flow
+        </span>
+        <span className="text-stone-700 dark:text-stone-300">Scrape</span>
       </div>
     </Link>
   );

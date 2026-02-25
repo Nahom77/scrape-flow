@@ -7,6 +7,9 @@ import {
   ShieldCheckIcon,
 } from "lucide-react";
 import Logo from "./Logo";
+import Link from "next/link";
+import { buttonVariants } from "./ui/button";
+import { usePathname } from "next/navigation";
 
 const routes = [
   {
@@ -32,10 +35,37 @@ const routes = [
 ];
 
 function DesktopSidebar() {
+  const pathname = usePathname();
+  const activeRoute =
+    routes.find(
+      (route) => route.href.length > 0 && pathname.includes(route.href),
+    ) || routes[0];
+
+  console.log(pathname);
   return (
     <div className="w-full min-w-70 max-w-70 h-screen overflow-hidden hidden md:block relative bg-primary/5 dark:bg-secondary/30 border-r-2 text-muted-foreground dark:text-foreground border-separate">
       <div className="p-4 flex justify-center items-center gap-2 border-b border-separate">
         <Logo />
+      </div>
+
+      <div className="p-2">TODO CREDITS</div>
+
+      <div className="p-2 flex flex-col gap-1">
+        {routes.map((route) => (
+          <Link
+            key={route.href}
+            href={route.href}
+            className={buttonVariants({
+              variant:
+                activeRoute.href === route.href
+                  ? "sidebarActiveItem"
+                  : "sidebarItem",
+            })}
+          >
+            <route.icon size={20} />
+            {route.label}
+          </Link>
+        ))}
       </div>
     </div>
   );
