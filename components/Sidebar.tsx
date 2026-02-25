@@ -4,12 +4,21 @@ import {
   CoinsIcon,
   HomeIcon,
   Layers2Icon,
+  MenuIcon,
   ShieldCheckIcon,
 } from "lucide-react";
 import Logo from "./Logo";
 import Link from "next/link";
-import { buttonVariants } from "./ui/button";
+import { Button, buttonVariants } from "./ui/button";
 import { usePathname } from "next/navigation";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "./ui/sheet";
+import { useState } from "react";
 
 const routes = [
   {
@@ -67,6 +76,53 @@ function DesktopSidebar() {
           </Link>
         ))}
       </div>
+    </div>
+  );
+}
+
+export function MobileSidebar() {
+  const [isOpen, setOpen] = useState(false);
+  const pathname = usePathname();
+  const activeRoute =
+    routes.find(
+      (route) => route.href.length > 0 && pathname.includes(route.href),
+    ) || routes[0];
+
+  return (
+    <div className="md:hidden block bg-background border-separate">
+      <nav className="px-8 flex justify-between items-center container">
+        <Sheet open={isOpen} onOpenChange={setOpen}>
+          <SheetTrigger asChild>
+            <Button variant={"ghost"} size={"icon"}>
+              <MenuIcon />
+            </Button>
+          </SheetTrigger>
+          <SheetContent className="w-80 sm:w-135 p-3 space-y-4" side={"left"}>
+            <SheetHeader>
+              <Logo />
+              <SheetTitle hidden>MobileSidebar</SheetTitle>
+            </SheetHeader>
+            <div className="flex flex-col gap-1">
+              {routes.map((route) => (
+                <Link
+                  key={route.href}
+                  href={route.href}
+                  onClick={() => setOpen((prev) => !prev)}
+                  className={buttonVariants({
+                    variant:
+                      activeRoute.href === route.href
+                        ? "sidebarActiveItem"
+                        : "sidebarItem",
+                  })}
+                >
+                  <route.icon size={20} />
+                  {route.label}
+                </Link>
+              ))}
+            </div>
+          </SheetContent>
+        </Sheet>
+      </nav>
     </div>
   );
 }
