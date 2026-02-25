@@ -1,3 +1,4 @@
+import BreadcrumbHeader from "@/components/BreadcrumbHeader";
 import DesktopSidebar from "@/components/Sidebar";
 import { Separator } from "@/components/ui/separator";
 import React, { ReactNode } from "react";
@@ -8,7 +9,7 @@ function layout({ children }: { children: ReactNode }) {
       <DesktopSidebar />
       <div className="min-h-screen flex flex-col flex-1">
         <header className="h-12.5 px-6 py-4 flex justify-between items-center container">
-          ScrapeFlow
+          <BreadcrumbHeader />
         </header>
         <Separator />
         <div className="overflow-auto">
