@@ -14,6 +14,7 @@ import { usePathname } from "next/navigation";
 import {
   Sheet,
   SheetContent,
+  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -98,9 +99,12 @@ export function MobileSidebar() {
             </Button>
           </SheetTrigger>
           <SheetContent className="w-80 sm:w-135 p-3 space-y-4" side={"left"}>
-            <SheetHeader>
+            <SheetHeader className="p-0">
               <Logo />
-              <SheetTitle hidden>MobileSidebar</SheetTitle>
+              <SheetTitle className="hidden">MobileSidebar</SheetTitle>
+              <SheetDescription className="hidden">
+                MobileSidebar
+              </SheetDescription>
             </SheetHeader>
             <div className="flex flex-col gap-1">
               {routes.map((route) => (
