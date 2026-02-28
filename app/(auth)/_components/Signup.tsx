@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -14,18 +16,35 @@ import {
   FieldSeparator,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { signUpSchema } from "@/lib/validation";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import Logo from "@/components/Logo";
+import { SquareDashedMousePointer } from "lucide-react";
+
+type signUpValues = z.infer<typeof signUpSchema>;
 
 export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
+  const form = useForm<signUpValues>({
+    resolver: zodResolver(signUpSchema),
+  });
+
   return (
     <Card {...props} className="min-w-[95vw] sm:min-w-120 px-4">
-      <CardHeader>
-        <CardTitle>Create an account</CardTitle>
-        <CardDescription>
+      <CardHeader className="gap-0">
+        <CardTitle className="flex flex-col justify-center items-center gap-1 font-bold text-2xl text-center">
+          <div className="w-fit p-2 bg-linear-to-r from-emerald-500 to-emerald-600 rounded-xl">
+            <SquareDashedMousePointer size={30} className="stroke-white" />
+          </div>
+          Create an account
+        </CardTitle>
+        <CardDescription className="text-muted-foreground/60 text-center">
           Enter your information below to create your account
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form>
+        <form noValidate>
           <FieldGroup className="gap-3">
             <Field>
               <FieldLabel htmlFor="name">Full Name</FieldLabel>
