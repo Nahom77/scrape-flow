@@ -3,7 +3,7 @@ import z from "zod";
 // Name
 const nameSchema = z
   .string()
-  .trim()
+  //   .trim()
   .min(2, "Name must be at least 2 Characters")
   .max(50, "Name shouldn't exceed 25 characters");
 
