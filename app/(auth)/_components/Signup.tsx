@@ -21,6 +21,7 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { AlertCircle, SquareDashedMousePointer } from "lucide-react";
+import Link from "next/link";
 
 type signUpValues = z.infer<typeof signUpSchema>;
 
@@ -40,7 +41,10 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
   };
 
   return (
-    <Card {...props} className="min-w-[95vw] sm:min-w-120 sm:px-4 py-3">
+    <Card
+      {...props}
+      className="min-w-[95vw] sm:min-w-150 sm:px-4 py-4 sm:py-10"
+    >
       <CardHeader className="gap-0">
         <CardTitle className="flex flex-col justify-center items-center gap-1 font-bold text-2xl text-center">
           <div className="w-fit p-2 bg-linear-to-r from-emerald-500 to-emerald-600 rounded-xl">
@@ -80,109 +84,110 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
           </svg>
           Sign up with Google
         </Button>
-        <FieldSeparator className="my-2">
+        <FieldSeparator className="my-4 md:my-8">
           <span className="text-muted-foreground/60 text-xs">
             OR SIGNUP WITH
           </span>
         </FieldSeparator>
 
         <form onSubmit={form.handleSubmit(handleSubmit)} noValidate>
-          <FieldGroup className="gap-3">
-            <Controller
-              name="fullName"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field className="gap-2">
-                  <FieldLabel htmlFor="name">Full Name</FieldLabel>
-                  <Input
-                    {...field}
-                    id="fullName"
-                    type="text"
-                    placeholder="John Doe"
-                  />
-                  {fieldState.invalid && (
-                    <span className="mx-1 flex items-center gap-1 text-destructive text-xs">
-                      <AlertCircle className="w-3 h-3" />
-                      {fieldState.error?.message}
-                    </span>
-                  )}
-                </Field>
-              )}
-            />
+          <FieldGroup className="gap-10">
+            <div className="items-start gap-3 sm:gap-6 grid grid-cols-1 sm:grid-cols-2">
+              <Controller
+                name="fullName"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field className="gap-2">
+                    <FieldLabel htmlFor="name">Full Name</FieldLabel>
+                    <Input
+                      {...field}
+                      id="fullName"
+                      type="text"
+                      placeholder="John Doe"
+                    />
+                    {fieldState.invalid && (
+                      <span className="mx-1 flex items-center gap-1 text-destructive text-xs">
+                        <AlertCircle className="w-3 h-3" />
+                        {fieldState.error?.message}
+                      </span>
+                    )}
+                  </Field>
+                )}
+              />
 
-            <Controller
-              name="email"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field className="gap-2">
-                  <FieldLabel htmlFor="email">Email</FieldLabel>
-                  <Input
-                    {...field}
-                    id="email"
-                    type="email"
-                    placeholder="m@example.com"
-                  />
-                  {fieldState.invalid && (
-                    <span className="mx-1 flex items-center gap-1 text-destructive text-xs">
-                      <AlertCircle className="w-3 h-3" />
-                      {fieldState.error?.message}
-                    </span>
-                  )}
-                </Field>
-              )}
-            />
+              <Controller
+                name="email"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field className="gap-2">
+                    <FieldLabel htmlFor="email">Email</FieldLabel>
+                    <Input
+                      {...field}
+                      id="email"
+                      type="email"
+                      placeholder="m@example.com"
+                    />
+                    {fieldState.invalid && (
+                      <span className="mx-1 flex items-center gap-1 text-destructive text-xs">
+                        <AlertCircle className="w-3 h-3" />
+                        {fieldState.error?.message}
+                      </span>
+                    )}
+                  </Field>
+                )}
+              />
 
-            <Controller
-              name="password"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field className="gap-2">
-                  <FieldLabel htmlFor="password">
-                    Password{" "}
-                    <span className="ml-0 text-foreground/50 text-xs">
-                      (Must be at least 6 characters long.)
-                    </span>
-                  </FieldLabel>
-                  <Input {...field} id="password" type="password" />
-                  {fieldState.invalid && (
-                    <span className="mx-1 flex items-center gap-1 text-destructive text-xs">
-                      <AlertCircle className="w-3 h-3" />
-                      {fieldState.error?.message}
-                    </span>
-                  )}
-                </Field>
-              )}
-            />
+              <Controller
+                name="password"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field className="gap-2">
+                    <FieldLabel htmlFor="password">
+                      Password{" "}
+                      <span className="ml-0 text-foreground/50 text-xs">
+                        (At least 6 characters long.)
+                      </span>
+                    </FieldLabel>
+                    <Input {...field} id="password" type="password" />
+                    {fieldState.invalid && (
+                      <span className="mx-1 flex items-center gap-1 text-destructive text-xs">
+                        <AlertCircle className="w-3 h-3" />
+                        {fieldState.error?.message}
+                      </span>
+                    )}
+                  </Field>
+                )}
+              />
 
-            <Controller
-              name="confirmPassword"
-              control={form.control}
-              render={({ field, fieldState }) => (
-                <Field className="gap-2">
-                  <FieldLabel htmlFor="confirm-password">
-                    Confirm Password
-                  </FieldLabel>
-                  <Input
-                    {...field}
-                    id="confirm-password"
-                    type="password"
-                    required
-                  />
-                  {fieldState.invalid && (
-                    <span className="mx-1 flex items-center gap-1 text-destructive text-xs">
-                      <AlertCircle className="w-3 h-3" />
-                      {fieldState.error?.message}
-                    </span>
-                  )}
-                </Field>
-              )}
-            />
-
+              <Controller
+                name="confirmPassword"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field className="gap-2">
+                    <FieldLabel htmlFor="confirm-password">
+                      Confirm Password
+                    </FieldLabel>
+                    <Input
+                      {...field}
+                      id="confirm-password"
+                      type="password"
+                      required
+                    />
+                    {fieldState.invalid && (
+                      <span className="mx-1 flex items-center gap-1 text-destructive text-xs">
+                        <AlertCircle className="w-3 h-3" />
+                        {fieldState.error?.message}
+                      </span>
+                    )}
+                  </Field>
+                )}
+              />
+            </div>
             <FieldGroup>
               <Field>
                 <Button type="submit">Create Account</Button>
                 <FieldDescription className="px-6 text-center">
-                  Already have an account? <a href="#">Sign in</a>
+                  Already have an account? <Link href="/sign-in">Sign in</Link>
                 </FieldDescription>
               </Field>
             </FieldGroup>
