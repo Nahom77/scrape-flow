@@ -20,12 +20,23 @@ import { signInSchema } from "@/lib/validation";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { AlertCircle, SquareDashedMousePointer } from "lucide-react";
+import {
+  AlertCircle,
+  Loader2Icon,
+  SquareDashedMousePointer,
+} from "lucide-react";
 import Link from "next/link";
+import { useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { authClient } from "@/lib/auth-client";
+import { toast } from "sonner";
 
 type signInValues = z.infer<typeof signInSchema>;
 
 export function SigninForm({ ...props }: React.ComponentProps<typeof Card>) {
+  const router = useRouter();
+  const [loading, startTransition] = useTransition();
+
   const form = useForm<signInValues>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -34,8 +45,24 @@ export function SigninForm({ ...props }: React.ComponentProps<typeof Card>) {
     },
   });
 
-  const handleSubmit = (data: signInValues) => {
-    console.log(data);
+  const handleSubmit = ({ email, password }: signInValues) => {
+    startTransition(async () => {
+      await authClient.signIn.email(
+        {
+          email,
+          password,
+        },
+        {
+          onSuccess: async () => {
+            router.push("/");
+            toast.success("Successfully signed in");
+          },
+          onError: (ctx) => {
+            toast.error(ctx.error.message || "Something went wrong");
+          },
+        },
+      );
+    });
   };
 
   return (
@@ -135,7 +162,9 @@ export function SigninForm({ ...props }: React.ComponentProps<typeof Card>) {
             />
             <FieldGroup>
               <Field>
-                <Button type="submit">Login</Button>
+                <Button type="submit" disabled={loading}>
+                  {loading ? <Loader2Icon className="animate-spin" /> : "Login"}
+                </Button>
                 <FieldDescription className="px-6 text-center">
                   Don&lsquo;t have an account?{" "}
                   <Link href="/sign-up">Sign up</Link>
