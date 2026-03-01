@@ -41,10 +41,7 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
   };
 
   return (
-    <Card
-      {...props}
-      className="min-w-[95vw] sm:min-w-150 sm:px-4 py-4 sm:py-10"
-    >
+    <Card {...props} className="min-w-[95vw] sm:min-w-150 sm:px-6 py-4 sm:py-8">
       <CardHeader className="gap-0">
         <CardTitle className="flex flex-col justify-center items-center gap-1 font-bold text-2xl text-center">
           <div className="w-fit p-2 bg-linear-to-r from-emerald-500 to-emerald-600 rounded-xl">
@@ -84,7 +81,7 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
           </svg>
           Sign up with Google
         </Button>
-        <FieldSeparator className="my-4 md:my-8">
+        <FieldSeparator className="my-4 md:my-6">
           <span className="text-muted-foreground/60 text-xs">
             OR SIGNUP WITH
           </span>
