@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import "./globals.css";
 import AppProviders from "@/components/providers/AppProviders";
+import { Toaster } from "@/components/ui/sonner";
 
 const fontSans = Outfit({
   subsets: ["latin"],
@@ -21,7 +22,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${fontSans.variable} antialiased`}>
-        <AppProviders>{children}</AppProviders>
+        <AppProviders>
+          {children}
+          <Toaster richColors />
+        </AppProviders>
       </body>
     </html>
   );

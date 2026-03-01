@@ -20,12 +20,23 @@ import { signUpSchema } from "@/lib/validation";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { AlertCircle, SquareDashedMousePointer } from "lucide-react";
+import {
+  AlertCircle,
+  Loader2Icon,
+  SquareDashedMousePointer,
+} from "lucide-react";
 import Link from "next/link";
+import { useTransition } from "react";
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 type signUpValues = z.infer<typeof signUpSchema>;
 
 export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
+  const router = useRouter();
+  const [loading, startTransition] = useTransition();
+
   const form = useForm<signUpValues>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -36,12 +47,32 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
     },
   });
 
-  const handleSubmit = (data: signUpValues) => {
-    console.log(data);
+  const handleSubmit = ({ email, fullName, password }: signUpValues) => {
+    startTransition(async () => {
+      await authClient.signUp.email(
+        {
+          email,
+          password,
+          name: fullName,
+        },
+        {
+          onSuccess: async () => {
+            router.push("/");
+            toast.success("You have Successfully created an account");
+          },
+          onError: (ctx) => {
+            toast.error(ctx.error.message || "Something went wrong");
+          },
+        },
+      );
+    });
   };
 
   return (
-    <Card {...props} className="min-w-[95vw] sm:min-w-150 sm:px-6 py-4 sm:py-8">
+    <Card
+      {...props}
+      className="min-w-[95vw] sm:min-w-150 sm:px-4 py-4 sm:py-10"
+    >
       <CardHeader className="gap-0">
         <CardTitle className="flex flex-col justify-center items-center gap-1 font-bold text-2xl text-center">
           <div className="w-fit p-2 bg-linear-to-r from-emerald-500 to-emerald-600 rounded-xl">
@@ -182,9 +213,15 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
             </div>
             <FieldGroup>
               <Field>
-                <Button type="submit">Create Account</Button>
+                <Button type="submit" disabled={loading}>
+                  {loading ? (
+                    <Loader2Icon className="animate-spin" />
+                  ) : (
+                    "Create Account"
+                  )}
+                </Button>
                 <FieldDescription className="px-6 text-center">
-                  Already have an account? <Link href="/sign-in">Sign in</Link>
+                  Already have an account? <Link href="/sign-in">Signin</Link>
                 </FieldDescription>
               </Field>
             </FieldGroup>
