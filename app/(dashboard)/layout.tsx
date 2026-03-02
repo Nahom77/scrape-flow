@@ -9,27 +9,6 @@ import { redirect } from "next/navigation";
 import React, { ReactNode } from "react";
 
 async function Layout({ children }: { children: ReactNode }) {
-  // const user = useAppStore((s) => s.user);
-  // const setUser = useAppStore((s) => s.setUser);
-  // const router = useRouter();
-
-  // useEffect(() => {
-  //   if (user) return;
-
-  //   const fetchSession = () => {
-  //     const { data } = authClient.useSession();
-  //     setUser(data?.user);
-  //   };
-
-  //   fetchSession();
-  // }, [user, setUser]);
-
-  // useEffect(() => {
-  //   if (!user) {
-  //     router.push("/sign-in");
-  //   }
-  // }, [user, router]);
-
   const session = await auth.api.getSession({
     headers: await headers(), // you need to pass the headers object.
   });
