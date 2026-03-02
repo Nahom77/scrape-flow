@@ -19,27 +19,20 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useEffect, useTransition } from "react";
+import { useTransition } from "react";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { User } from "@/types";
 
-export function UserAvatar({
-  user,
-}: {
-  user: {
-    name: string;
-    email: string;
-    avatar?: string;
-  };
-}) {
+interface Props {
+  user: User;
+}
+
+export function UserAvatar({ user }: Props) {
   const router = useRouter();
 
   const [loading, startTransition] = useTransition();
-  const { data } = authClient.useSession();
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
 
   function handleLogOut() {
     startTransition(async () => {
@@ -60,9 +53,9 @@ export function UserAvatar({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar className="w-9 h-9 rounded-lg">
-          <AvatarImage src={user.avatar} alt={user.name} />
+          <AvatarImage src={user?.image} alt={user?.name} />
           <AvatarFallback className="rounded-lg">
-            {user.name.slice(0, 1)}
+            {user?.name.slice(0, 1)}
           </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
@@ -74,14 +67,14 @@ export function UserAvatar({
         <DropdownMenuLabel className="p-0 font-normal">
           <div className="px-1 py-1.5 flex items-center gap-2 text-sm text-left">
             <Avatar className="w-8 h-8 rounded-lg">
-              <AvatarImage src={user.avatar} alt={user.name} />
+              <AvatarImage src={user?.image} alt={user?.name} />
               <AvatarFallback className="rounded-lg">
-                {user.name.slice(0, 1)}
+                {user?.name.slice(0, 1)}
               </AvatarFallback>
             </Avatar>
             <div className="flex-1 grid text-sm text-left leading-tight">
-              <span className="font-medium truncate">{user.name}</span>
-              <span className="text-xs truncate">{user.email}</span>
+              <span className="font-medium truncate">{user?.name}</span>
+              <span className="text-xs truncate">{user?.email}</span>
             </div>
           </div>
         </DropdownMenuLabel>

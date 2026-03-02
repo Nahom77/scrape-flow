@@ -23,7 +23,7 @@ import { useState } from "react";
 
 const routes = [
   {
-    href: "",
+    href: "/",
     label: "Home",
     icon: HomeIcon,
   },
@@ -48,7 +48,7 @@ function DesktopSidebar() {
   const pathname = usePathname();
   const activeRoute =
     routes.find(
-      (route) => route.href.length > 0 && pathname.includes(route.href),
+      (route) => route.href.length > 1 && pathname.includes(route.href),
     ) || routes[0];
 
   console.log(pathname);

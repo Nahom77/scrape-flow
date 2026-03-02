@@ -3,33 +3,63 @@ import DesktopSidebar from "@/components/Sidebar";
 import { ModeToggle } from "@/components/ThemeModeToggle";
 import { Separator } from "@/components/ui/separator";
 import { UserAvatar } from "@/components/UserAvatar";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import React, { ReactNode } from "react";
 
-function layout({ children }: { children: ReactNode }) {
-  const user = {
-    name: "Nahom Tigistu",
-    email: "nahom@gmail.com",
-  };
+async function Layout({ children }: { children: ReactNode }) {
+  // const user = useAppStore((s) => s.user);
+  // const setUser = useAppStore((s) => s.setUser);
+  // const router = useRouter();
+
+  // useEffect(() => {
+  //   if (user) return;
+
+  //   const fetchSession = () => {
+  //     const { data } = authClient.useSession();
+  //     setUser(data?.user);
+  //   };
+
+  //   fetchSession();
+  // }, [user, setUser]);
+
+  // useEffect(() => {
+  //   if (!user) {
+  //     router.push("/sign-in");
+  //   }
+  // }, [user, router]);
+
+  const session = await auth.api.getSession({
+    headers: await headers(), // you need to pass the headers object.
+  });
+
+  if (!session?.user) {
+    redirect("/sign-in"); // 🚀 server-side redirect
+  }
+
   return (
-    <div className="h-screen flex">
-      <DesktopSidebar />
-      <div className="min-h-screen flex flex-col flex-1">
-        <header className="h-12.5 px-6 py-4 flex justify-between items-center container">
-          <BreadcrumbHeader />
-          <div className="flex items-center gap-1">
-            <ModeToggle />
-            <UserAvatar user={user} />
-          </div>
-        </header>
-        <Separator />
-        <div className="overflow-auto">
-          <div className="py-4 flex-1 text-accent-foreground container">
-            {children}
+    session?.user && (
+      <div className="h-screen flex">
+        <DesktopSidebar />
+        <div className="min-h-screen flex flex-col flex-1">
+          <header className="h-12.5 px-6 py-4 flex justify-between items-center container">
+            <BreadcrumbHeader />
+            <div className="flex items-center gap-1">
+              <ModeToggle />
+              <UserAvatar user={session?.user} />
+            </div>
+          </header>
+          <Separator />
+          <div className="overflow-auto">
+            <div className="py-4 flex-1 text-accent-foreground container">
+              {children}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    )
   );
 }
 
-export default layout;
+export default Layout;
