@@ -68,6 +68,22 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
     });
   };
 
+  const handleSocialSignIn = () => {
+    startTransition(async () => {
+      await authClient.signIn.social(
+        {
+          provider: "google",
+          callbackURL: "/",
+        },
+        {
+          onError: (ctx) => {
+            toast.error(ctx.error.message || "Something went wrong");
+          },
+        },
+      );
+    });
+  };
+
   return (
     <Card
       {...props}
@@ -85,7 +101,13 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Button variant="outline" type="button" className="w-full gap-5">
+        <Button
+          onClick={handleSocialSignIn}
+          disabled={loading}
+          variant="outline"
+          type="button"
+          className="w-full gap-5"
+        >
           <svg
             width="800px"
             height="800px"
@@ -110,7 +132,7 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
               fill="#EB4335"
             />
           </svg>
-          Sign up with Google
+          Continue with Google
         </Button>
         <FieldSeparator className="my-4 md:my-6">
           <span className="text-muted-foreground/60 text-xs">
