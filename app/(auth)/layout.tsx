@@ -4,15 +4,6 @@ import { redirect } from "next/navigation";
 import React, { ReactNode } from "react";
 
 async function Layout({ children }: { children: ReactNode }) {
-  // const router = useRouter();
-  // const user = useAppStore((s) => s.user);
-
-  // useEffect(() => {
-  //   if (user) {
-  //     router.push("/");
-  //   }
-  // });
-
   const session = await auth.api.getSession({
     headers: await headers(), // you need to pass the headers object.
   });
