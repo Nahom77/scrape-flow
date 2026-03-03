@@ -3,15 +3,12 @@ import DesktopSidebar from "@/components/Sidebar";
 import { ModeToggle } from "@/components/ThemeModeToggle";
 import { Separator } from "@/components/ui/separator";
 import { UserAvatar } from "@/components/UserAvatar";
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
+import { getServerSession } from "@/lib/get-session";
 import { redirect } from "next/navigation";
 import React, { ReactNode } from "react";
 
 async function Layout({ children }: { children: ReactNode }) {
-  const session = await auth.api.getSession({
-    headers: await headers(), // you need to pass the headers object.
-  });
+  const session = await getServerSession();
 
   if (!session?.user) {
     redirect("/sign-in"); // 🚀 server-side redirect

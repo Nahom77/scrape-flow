@@ -1,12 +1,9 @@
-import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
+import { getServerSession } from "@/lib/get-session";
 import { redirect } from "next/navigation";
 import React, { ReactNode } from "react";
 
 async function Layout({ children }: { children: ReactNode }) {
-  const session = await auth.api.getSession({
-    headers: await headers(), // you need to pass the headers object.
-  });
+  const session = await getServerSession();
 
   if (session?.user) {
     redirect("/"); // 🚀 server-side redirect
