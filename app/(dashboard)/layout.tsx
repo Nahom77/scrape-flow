@@ -31,7 +31,7 @@ async function Layout({ children }: { children: ReactNode }) {
           </header>
           <Separator />
           <div className="overflow-auto">
-            <div className="py-4 flex-1 text-accent-foreground container">
+            <div className="p-4 flex-1 text-accent-foreground container">
               {children}
             </div>
           </div>
