@@ -51,7 +51,6 @@ function DesktopSidebar() {
       (route) => route.href.length > 1 && pathname.includes(route.href),
     ) || routes[0];
 
-  console.log(pathname);
   return (
     <div className="w-full min-w-70 max-w-70 h-screen overflow-hidden hidden md:block relative bg-primary/5 dark:bg-secondary/30 border-r-2 text-muted-foreground dark:text-foreground border-separate">
       <div className="p-4 flex justify-center items-center gap-2 border-b border-separate">
