@@ -14,7 +14,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import CustomDialogHeader from "./CustomDialogHeader";
 import { AlertCircle, Layers2Icon, Loader2Icon } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
@@ -24,26 +24,50 @@ import {
 } from "@/schema/workflows.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Textarea } from "@/components/ui/textarea";
+import { useMutation } from "@tanstack/react-query";
+import { CreateWorkflow } from "@/actions/workflows/createWorkflow";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { APIResults } from "@/types/api-results.type";
+import { Workflow } from "@/types/workflow.type";
 
 interface Props {
   triggerText?: string;
 }
 
 function CreateWorkflowDialog({ triggerText }: Props) {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
-  const loading = false;
 
   const form = useForm<CreateWorkflowValues>({
     resolver: zodResolver(createWorkflowSchema),
     defaultValues: {
-      // name: "",
-      // description: "",
+      name: "",
+      description: "",
     },
   });
 
-  const handleSubmit = (data: CreateWorkflowValues) => {
-    console.log(data.name);
-  };
+  const { mutate, isPending } = useMutation({
+    mutationFn: CreateWorkflow,
+    onSuccess: (data: APIResults<Workflow>) => {
+      toast.success("Workflow created successfully", { id: "create-workflow" });
+      console.log(data?.data.id);
+      router.push(`workflow/editor/${data?.data.id}`);
+    },
+    onError: (err) => {
+      toast.error(err.message || "Failed to create workflow", {
+        id: "create-workflow",
+      });
+    },
+  });
+
+  const handleSubmit = useCallback(
+    (data: CreateWorkflowValues) => {
+      toast.loading("Creating workflow ...", { id: "create-workflow" });
+      mutate(data);
+    },
+    [mutate],
+  );
 
   return (
     <Dialog
@@ -124,8 +148,8 @@ function CreateWorkflowDialog({ triggerText }: Props) {
               />
               <FieldGroup>
                 <Field>
-                  <Button type="submit" disabled={loading}>
-                    {loading ? (
+                  <Button type="submit" disabled={isPending}>
+                    {isPending ? (
                       <Loader2Icon className="animate-spin" />
                     ) : (
                       "Proceed"
