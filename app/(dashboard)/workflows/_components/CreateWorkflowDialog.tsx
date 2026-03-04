@@ -1,17 +1,26 @@
 "use client";
 import { Button } from "@/components/ui/button";
+
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Field,
+  FieldDescription,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import React, { useState } from "react";
 import CustomDialogHeader from "./CustomDialogHeader";
-import { Layers2Icon } from "lucide-react";
-import { useForm } from "react-hook-form";
+import { AlertCircle, Layers2Icon, Loader2Icon } from "lucide-react";
+import { Controller, useForm } from "react-hook-form";
 import { createWorkflowSchema, WorkflowType } from "@/schema/workflows";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Textarea } from "@/components/ui/textarea";
 
 interface Props {
   triggerText?: string;
@@ -19,6 +28,7 @@ interface Props {
 
 function CreateWorkflowDialog({ triggerText }: Props) {
   const [open, setOpen] = useState(false);
+  const loading = false;
 
   const form = useForm<WorkflowType>({
     resolver: zodResolver(createWorkflowSchema),
@@ -27,6 +37,8 @@ function CreateWorkflowDialog({ triggerText }: Props) {
       description: "",
     },
   });
+
+  const handleSubmit = () => {};
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -44,7 +56,75 @@ function CreateWorkflowDialog({ triggerText }: Props) {
           Create workflow
         </DialogDescription>
 
-        <div className="p-6"></div>
+        <div className="p-6">
+          <form onSubmit={form.handleSubmit(handleSubmit)} noValidate>
+            <FieldGroup className="gap-5">
+              <Controller
+                name="name"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field className="gap-2">
+                    <FieldLabel htmlFor="name">
+                      Name <p className="text-primary text-sm">(required)</p>
+                    </FieldLabel>
+                    <Input {...field} id="name" type="text" />
+                    <FieldDescription>
+                      Choose a descriptive and unique name
+                    </FieldDescription>
+                    {fieldState.invalid && (
+                      <span className="mx-1 flex items-center gap-1 text-destructive text-xs">
+                        <AlertCircle className="w-3 h-3" />
+                        {fieldState.error?.message}
+                      </span>
+                    )}
+                  </Field>
+                )}
+              />
+
+              <Controller
+                name="description"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field className="gap-2">
+                    <FieldLabel htmlFor="description">
+                      Description{" "}
+                      <p className="text-muted-foreground text-sm">
+                        (optional)
+                      </p>
+                    </FieldLabel>
+                    <Textarea
+                      {...field}
+                      id="description"
+                      className="resize-none"
+                    />
+                    <FieldDescription>
+                      Provide a brief description of what your workflow does.{" "}
+                      <br /> This is optional but can help you remember the
+                      workflow&rsquo;s purpose
+                    </FieldDescription>
+                    {fieldState.invalid && (
+                      <span className="mx-1 flex items-center gap-1 text-destructive text-xs">
+                        <AlertCircle className="w-3 h-3" />
+                        {fieldState.error?.message}
+                      </span>
+                    )}
+                  </Field>
+                )}
+              />
+              <FieldGroup>
+                <Field>
+                  <Button type="submit" disabled={loading}>
+                    {loading ? (
+                      <Loader2Icon className="animate-spin" />
+                    ) : (
+                      "Proceed"
+                    )}
+                  </Button>
+                </Field>
+              </FieldGroup>
+            </FieldGroup>
+          </form>
+        </div>
       </DialogContent>
     </Dialog>
   );
