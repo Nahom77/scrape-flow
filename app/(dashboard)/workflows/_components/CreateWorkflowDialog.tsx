@@ -18,7 +18,7 @@ import React, { useState } from "react";
 import CustomDialogHeader from "./CustomDialogHeader";
 import { AlertCircle, Layers2Icon, Loader2Icon } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
-import { createWorkflowSchema, WorkflowType } from "@/schema/workflows";
+import { createWorkflowSchema, CreateWorkflowValues } from "@/schema/workflows";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -30,22 +30,30 @@ function CreateWorkflowDialog({ triggerText }: Props) {
   const [open, setOpen] = useState(false);
   const loading = false;
 
-  const form = useForm<WorkflowType>({
+  const form = useForm<CreateWorkflowValues>({
     resolver: zodResolver(createWorkflowSchema),
     defaultValues: {
-      name: "",
-      description: "",
+      // name: "",
+      // description: "",
     },
   });
 
-  const handleSubmit = () => {};
+  const handleSubmit = (data: CreateWorkflowValues) => {
+    console.log(data.name);
+  };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog
+      open={open}
+      onOpenChange={() => {
+        form.reset();
+        setOpen(!open);
+      }}
+    >
       <DialogTrigger asChild>
         <Button>{triggerText ?? "Create workflow"}</Button>
       </DialogTrigger>
-      <DialogContent className="px-0">
+      <DialogContent className="px-0 gap-0">
         <CustomDialogHeader
           icon={Layers2Icon}
           title="Create workflow"
