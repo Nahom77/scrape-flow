@@ -23,7 +23,7 @@ import { useTransition } from "react";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { User } from "@/types";
+import { User } from "@/types/auth.type";
 
 interface Props {
   user: User;

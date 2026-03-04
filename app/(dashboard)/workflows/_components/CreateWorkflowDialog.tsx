@@ -18,7 +18,10 @@ import React, { useState } from "react";
 import CustomDialogHeader from "./CustomDialogHeader";
 import { AlertCircle, Layers2Icon, Loader2Icon } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
-import { createWorkflowSchema, CreateWorkflowValues } from "@/schema/workflows";
+import {
+  createWorkflowSchema,
+  CreateWorkflowValues,
+} from "@/schema/workflows.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Textarea } from "@/components/ui/textarea";
 
