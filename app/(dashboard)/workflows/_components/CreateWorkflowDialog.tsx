@@ -28,8 +28,6 @@ import { useMutation } from "@tanstack/react-query";
 import { CreateWorkflow } from "@/actions/workflows/createWorkflow";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { APIResults } from "@/types/api-results.type";
-import { Workflow } from "@/types/workflow.type";
 
 interface Props {
   triggerText?: string;
@@ -49,9 +47,9 @@ function CreateWorkflowDialog({ triggerText }: Props) {
 
   const { mutate, isPending } = useMutation({
     mutationFn: CreateWorkflow,
-    onSuccess: (data: APIResults<Workflow>) => {
+    onSuccess: (data) => {
       toast.success("Workflow created successfully", { id: "create-workflow" });
-      console.log(data?.data.id);
+      console.log(data);
       router.push(`workflow/editor/${data?.data.id}`);
     },
     onError: (err) => {
