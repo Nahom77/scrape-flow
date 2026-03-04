@@ -27,7 +27,7 @@ function page() {
 
 function UserWorkflowSkeleton() {
   return (
-    <div>
+    <div className="flex flex-col gap-3">
       {[1, 2, 3, 4].map((i) => (
         <Skeleton key={i} className="w-full h-32" />
       ))}
