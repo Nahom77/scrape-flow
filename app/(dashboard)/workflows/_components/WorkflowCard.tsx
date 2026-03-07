@@ -1,6 +1,7 @@
 "use client";
 
 import TooltipWrapper from "@/components/TooltipWrapper";
+import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -55,9 +56,9 @@ function WorkflowCard({ workflow }: { workflow: Workflow }) {
                 {workflow.name}
               </Link>
               {isDraft && (
-                <span className="ml-2 px-2 py-0.5 bg-yellow-100 rounded-full font-medium text-yellow-800 text-xs">
+                <Badge className="ml-2 bg-yellow-100 rounded-sm text-yellow-800">
                   Draft
-                </span>
+                </Badge>
               )}
             </h3>
           </div>
