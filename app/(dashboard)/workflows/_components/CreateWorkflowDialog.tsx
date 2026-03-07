@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import React, { useCallback, useState } from "react";
-import CustomDialogHeader from "./CustomDialogHeader";
+import CustomDialogHeader from "../../../../components/CustomDialogHeader";
 import { AlertCircle, Layers2Icon, Loader2Icon } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import {

@@ -23,6 +23,8 @@ import {
   TrashIcon,
 } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
+import DeleteWorkflowDialog from "./DeleteWorkflowDialog";
 
 const statusColors = {
   [WorkflowStatus.DRAFT]: "bg-yellow-400 text-yellow-600",
@@ -75,35 +77,46 @@ function WorkflowCard({ workflow }: { workflow: Workflow }) {
             <ShuffleIcon size={16} /> Edit
           </Link>
 
-          <WorkflowActions />
+          <WorkflowActions workflowName={workflow.name} />
         </div>
       </CardContent>
     </Card>
   );
 }
 
-function WorkflowActions() {
+function WorkflowActions({ workflowName }: { workflowName: string }) {
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant={"outline"} size={"sm"} className="p-0">
-          <TooltipWrapper content={"More actions"}>
-            <div className="w-full h-full px-3 py-0 flex items-center">
-              <MoreVerticalIcon size={18} />
-            </div>
-          </TooltipWrapper>
-        </Button>
-      </DropdownMenuTrigger>
+    <>
+      <DeleteWorkflowDialog
+        open={showDeleteDialog}
+        setOpen={setShowDeleteDialog}
+        workflowName={workflowName}
+      />
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant={"outline"} size={"sm"} className="p-0">
+            <TooltipWrapper content={"More actions"}>
+              <div className="w-full h-full px-3 py-0 flex items-center">
+                <MoreVerticalIcon size={18} />
+              </div>
+            </TooltipWrapper>
+          </Button>
+        </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="end">
-        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem className="flex items-center gap-2 text-destructive">
-          <TrashIcon size={16} className="stroke-destructive" />
-          Delete
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+        <DropdownMenuContent align="end">
+          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            onSelect={() => setShowDeleteDialog((prev) => !prev)}
+            className="flex items-center gap-2 text-destructive"
+          >
+            <TrashIcon size={16} className="stroke-destructive" />
+            Delete
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </>
   );
 }
 
