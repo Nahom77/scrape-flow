@@ -55,7 +55,7 @@ async function UserWorkflows() {
         </div>
       );
 
-    return <div className="">All good</div>;
+    return <div className=""></div>;
   } catch {
     return (
       <Alert variant={"destructive"}>

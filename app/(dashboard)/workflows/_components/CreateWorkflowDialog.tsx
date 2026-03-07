@@ -70,9 +70,9 @@ function CreateWorkflowDialog({ triggerText }: Props) {
   return (
     <Dialog
       open={open}
-      onOpenChange={() => {
+      onOpenChange={(open) => {
         form.reset();
-        setOpen(!open);
+        setOpen(open);
       }}
     >
       <DialogTrigger asChild>
