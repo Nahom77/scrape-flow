@@ -73,9 +73,9 @@ function WorkflowCard({ workflow }: { workflow: Workflow }) {
           >
             <ShuffleIcon size={16} /> Edit
           </Link>
-        </div>
 
-        <WorkflowActions />
+          <WorkflowActions />
+        </div>
       </CardContent>
     </Card>
   );
@@ -84,13 +84,15 @@ function WorkflowCard({ workflow }: { workflow: Workflow }) {
 function WorkflowActions() {
   return (
     <DropdownMenu>
-      <TooltipWrapper content={"More actions"}>
-        <DropdownMenuTrigger asChild>
-          <Button variant={"outline"} size={"sm"}>
-            <MoreVerticalIcon size={18} />
-          </Button>
-        </DropdownMenuTrigger>
-      </TooltipWrapper>
+      <DropdownMenuTrigger asChild>
+        <Button variant={"outline"} size={"sm"} className="p-0">
+          <TooltipWrapper content={"More actions"}>
+            <div className="w-full h-full px-3 py-0 flex items-center">
+              <MoreVerticalIcon size={18} />
+            </div>
+          </TooltipWrapper>
+        </Button>
+      </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end">
         <DropdownMenuLabel>Actions</DropdownMenuLabel>
