@@ -1,6 +1,5 @@
 import { Workflow } from "@/generated/prisma/client";
 import { ReactFlowProvider } from "@xyflow/react";
-import "@xyflow/react/dist/style.css";
 import FlowEditor from "./FlowEditor";
 
 interface Props {

@@ -14,7 +14,6 @@ async function layout({ children }: { children: ReactNode }) {
 
   return (
     <div className="w-full h-screen flex flex-col">
-      {" "}
       {children}
       <Separator />
       <footer className="p-2 flex justify-between items-center">
