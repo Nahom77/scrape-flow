@@ -2,10 +2,12 @@ import { cn } from "@/lib/utils";
 import { TaskParam } from "@/types/tast.type";
 import { Handle, Position } from "@xyflow/react";
 import React from "react";
+import NodeParamField from "./NodeParamField";
 
 function NodeInput({ input }: { input: TaskParam }) {
   return (
     <div className="w-full p-3 flex justify-start relative bg-muted">
+      <NodeParamField param={input} />
       {!input.hideHandle && (
         <Handle
           id={input.name}
