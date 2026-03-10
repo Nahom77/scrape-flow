@@ -15,8 +15,12 @@ function StringParam({ param }: ParamProps) {
     <div className="w-full p-1 space-y-1">
       <Label htmlFor={id} className="flex text-xs">
         {param.name}
+        {param.required && <p className="text-destructive">*</p>}
       </Label>
       <Input id={id} className="bg-white" />
+      {param.helperText && (
+        <p className="px-2 text-muted-foreground/70">{param.helperText}</p>
+      )}
     </div>
   );
 }
