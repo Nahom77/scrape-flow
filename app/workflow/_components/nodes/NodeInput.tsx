@@ -4,10 +4,10 @@ import { Handle, Position } from "@xyflow/react";
 import React from "react";
 import NodeParamField from "./NodeParamField";
 
-function NodeInput({ input }: { input: TaskParam }) {
+function NodeInput({ input, nodeId }: { input: TaskParam; nodeId: string }) {
   return (
     <div className="w-full p-3 flex justify-start relative bg-muted">
-      <NodeParamField param={input} />
+      <NodeParamField param={input} nodeId={nodeId} />
       {!input.hideHandle && (
         <Handle
           id={input.name}
