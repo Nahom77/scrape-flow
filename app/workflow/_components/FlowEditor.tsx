@@ -11,10 +11,16 @@ import {
   useEdgesState,
   useNodesState,
 } from "@xyflow/react";
+import NodeComponent from "./nodes/NodeComponent";
+import { useEffect } from "react";
 
 interface Props {
   workflow: Workflow;
 }
+
+const nodeTypes = {
+  FlowScrapeNode: NodeComponent,
+};
 
 function FlowEditor({ workflow }: Props) {
   const [nodes, setNodes, onNodesChange] = useNodesState([
@@ -22,7 +28,12 @@ function FlowEditor({ workflow }: Props) {
   ]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
-  console.log(CreateFlowNode(TaskType.LAUNCH_BROWSER));
+  const customNode = CreateFlowNode(TaskType.LAUNCH_BROWSER);
+
+  useEffect(() => {
+    console.log(customNode);
+  }, [customNode]);
+
   return (
     <main className="w-full h-full">
       <ReactFlow
@@ -30,6 +41,7 @@ function FlowEditor({ workflow }: Props) {
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
+        nodeTypes={nodeTypes}
       >
         <Controls position="top-left" />
         <Background variant={BackgroundVariant.Dots} gap={12} size={1} />

@@ -7,10 +7,11 @@ export function CreateFlowNode(
 ): AppNode {
   return {
     id: crypto.randomUUID(),
+    type: "FlowScrapeNode",
     data: {
       type: nodeType,
       inputs: {},
     },
-    position: position ?? { x: 20, y: 20 },
+    position: position ?? { x: 0, y: 0 },
   };
 }
