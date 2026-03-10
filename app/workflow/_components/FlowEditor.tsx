@@ -22,6 +22,8 @@ const nodeTypes = {
   FlowScrapeNode: NodeComponent,
 };
 
+const snapGrid: [number, number] = [50, 50];
+
 function FlowEditor({ workflow }: Props) {
   const [nodes, setNodes, onNodesChange] = useNodesState([
     CreateFlowNode(TaskType.LAUNCH_BROWSER),
@@ -42,6 +44,8 @@ function FlowEditor({ workflow }: Props) {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         nodeTypes={nodeTypes}
+        snapToGrid={true}
+        snapGrid={snapGrid}
       >
         <Controls position="top-left" />
         <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
