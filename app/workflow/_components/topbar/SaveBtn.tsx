@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useReactFlow } from "@xyflow/react";
 import { CheckIcon } from "lucide-react";
 
-function SaveBtn() {
+function SaveBtn({ workflowId }: { workflowId: string }) {
   const { toObject } = useReactFlow();
   return (
     <Button

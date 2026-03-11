@@ -12,7 +12,11 @@ function Editor({ workflow }: Props) {
     <div className="w-full h-full">
       <ReactFlowProvider>
         <div className="w-full h-full overflow-hidden flex flex-col">
-          <Topbar title="Workflow Editor" subtitle={workflow.name} />
+          <Topbar
+            title="Workflow Editor"
+            subtitle={workflow.name}
+            workflowId={workflow.id}
+          />
           <section className="h-full overflow-auto flex">
             <FlowEditor workflow={workflow} />
           </section>
