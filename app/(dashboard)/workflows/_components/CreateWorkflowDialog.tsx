@@ -49,7 +49,6 @@ function CreateWorkflowDialog({ triggerText }: Props) {
     mutationFn: CreateWorkflow,
     onSuccess: (data) => {
       toast.success("Workflow created successfully", { id: "create-workflow" });
-      console.log(data);
       router.push(`workflow/editor/${data?.data.id}`);
     },
     onError: (err) => {

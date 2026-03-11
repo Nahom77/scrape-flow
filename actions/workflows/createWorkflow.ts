@@ -3,12 +3,16 @@
 import { Prisma } from "@/generated/prisma/client";
 import { getServerSession } from "@/lib/get-session";
 import prisma from "@/lib/prisma";
+import { CreateFlowNode } from "@/lib/workflow/createFlowNode";
 import {
   createWorkflowSchema,
   CreateWorkflowValues,
 } from "@/schema/workflows.schema";
 import { APIResults } from "@/types/api-results.type";
+import { AppNode } from "@/types/app-node.type";
+import { TaskType } from "@/types/tast.type";
 import { Workflow, WorkflowStatus } from "@/types/workflow.type";
+import { Edge } from "@xyflow/react";
 
 export async function CreateWorkflow(
   form: CreateWorkflowValues,
@@ -24,11 +28,18 @@ export async function CreateWorkflow(
       throw new Error("Unauthenticated");
     }
 
+    const initialFlow: { nodes: AppNode[]; edges: Edge[] } = {
+      nodes: [],
+      edges: [],
+    };
+
+    initialFlow.nodes.push(CreateFlowNode(TaskType.LAUNCH_BROWSER));
+
     const result = await prisma.workflow.create({
       data: {
         userId: session?.user.id,
         status: WorkflowStatus.DRAFT,
-        definition: "TODO",
+        definition: JSON.stringify(initialFlow),
         ...data,
       },
     });
