@@ -19,6 +19,7 @@ import { toast } from "sonner";
 import { TaskType } from "@/types/tast.type";
 import { CreateFlowNode } from "@/lib/workflow/createFlowNode";
 import { AppNode } from "@/types/app-node.type";
+import DeletableEdge from "./edges/DeletableEdge";
 
 interface Props {
   workflow: Workflow;
@@ -26,6 +27,10 @@ interface Props {
 
 const nodeTypes = {
   FlowScrapeNode: NodeComponent,
+};
+
+const edgeTypes = {
+  default: DeletableEdge,
 };
 
 const snapGrid: [number, number] = [50, 50];
@@ -86,6 +91,7 @@ function FlowEditor({ workflow }: Props) {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
         snapToGrid
         snapGrid={snapGrid}
         fitView
