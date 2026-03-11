@@ -3,6 +3,7 @@ import { TaskParam } from "@/types/tast.type";
 import { Handle, Position } from "@xyflow/react";
 import React from "react";
 import NodeParamField from "./NodeParamField";
+import { ColorForHandle } from "./common";
 
 function NodeInput({ input, nodeId }: { input: TaskParam; nodeId: string }) {
   return (
@@ -15,6 +16,7 @@ function NodeInput({ input, nodeId }: { input: TaskParam; nodeId: string }) {
           position={Position.Left}
           className={cn(
             "w-4! h-4! -left-2! bg-muted-foreground/60! border-2! border-background!",
+            ColorForHandle[input.type],
           )}
         />
       )}

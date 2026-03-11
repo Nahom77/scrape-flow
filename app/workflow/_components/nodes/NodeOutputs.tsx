@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils";
 import { TaskParam } from "@/types/tast.type";
 import { Handle, Position } from "@xyflow/react";
 import React, { ReactNode } from "react";
+import { ColorForHandle } from "./common";
 
 function NodeOutputs({ children }: { children: ReactNode }) {
   return <div className="flex flex-col gap-1 divide-y">{children}</div>;
@@ -19,6 +20,7 @@ export function NodeOutput({ output }: { output: TaskParam }) {
         position={Position.Right}
         className={cn(
           "size-4! -right-2! bg-muted-foreground! border-2! border-background!",
+          ColorForHandle[output.type],
         )}
       />
     </div>
