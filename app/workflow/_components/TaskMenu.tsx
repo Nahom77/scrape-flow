@@ -9,6 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { TaskRegistry } from "@/lib/workflow/task/registry";
 import { TaskType } from "@/types/tast.type";
+import React from "react";
 
 function TaskMenu() {
   return (
@@ -35,10 +36,19 @@ export default TaskMenu;
 
 function TaskMenuBtn({ taskType }: { taskType: TaskType }) {
   const task = TaskRegistry[taskType];
+
+  const handleDragStart = (e: React.DragEvent, taskType: TaskType) => {
+    if (e.dataTransfer) {
+      e.dataTransfer.setData("application/reactflow", taskType);
+      e.dataTransfer.effectAllowed = "move";
+    }
+  };
   return (
     <Button
       variant={"secondary"}
       className="w-full flex justify-between gap-2 border"
+      draggable
+      onDragStart={(e) => handleDragStart(e, taskType)}
     >
       <div className="flex gap-2">
         <task.icon size={20} />
