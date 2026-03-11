@@ -3,6 +3,7 @@
 import { getServerSession } from "@/lib/get-session";
 import prisma from "@/lib/prisma";
 import { WorkflowStatus } from "@/types/workflow.type";
+import { revalidatePath } from "next/cache";
 
 export async function UpdateWorkflow({
   id,
@@ -40,6 +41,8 @@ export async function UpdateWorkflow({
         userId: session.user.id,
       },
     });
+
+    revalidatePath("/workflows");
   } catch {
     throw Error("Something went wrong, please try again.");
   }
