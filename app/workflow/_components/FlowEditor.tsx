@@ -2,9 +2,12 @@
 
 import { Workflow } from "@/generated/prisma/client";
 import {
+  addEdge,
   Background,
   BackgroundVariant,
+  Connection,
   Controls,
+  Edge,
   ReactFlow,
   useEdgesState,
   useNodesState,
@@ -30,7 +33,7 @@ const fitViewOptions = { padding: 1 };
 
 function FlowEditor({ workflow }: Props) {
   const [nodes, setNodes, onNodesChange] = useNodesState<AppNode>([]);
-  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
   const { screenToFlowPosition } = useReactFlow();
 
   useEffect(() => {
@@ -68,6 +71,13 @@ function FlowEditor({ workflow }: Props) {
     [setNodes, screenToFlowPosition],
   );
 
+  const onConnect = useCallback(
+    (connection: Connection) => {
+      setEdges((eds) => addEdge({ ...connection, animated: true }, eds));
+    },
+    [setEdges],
+  );
+
   return (
     <main className="w-full h-full">
       <ReactFlow
@@ -82,6 +92,7 @@ function FlowEditor({ workflow }: Props) {
         fitViewOptions={fitViewOptions}
         onDragOver={handleDragOver}
         onDrop={handleDrop}
+        onConnect={onConnect}
       >
         <Controls position="top-left" fitViewOptions={fitViewOptions} />
         <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
