@@ -20,7 +20,6 @@ function DeletableEdge(props: EdgeProps) {
         path={edgePath}
         markerEnd={props.markerEnd}
         style={props.style}
-        // className="z-200"
       />
       <EdgeLabelRenderer>
         <div
