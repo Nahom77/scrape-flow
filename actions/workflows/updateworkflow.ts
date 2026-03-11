@@ -4,7 +4,13 @@ import { getServerSession } from "@/lib/get-session";
 import prisma from "@/lib/prisma";
 import { WorkflowStatus } from "@/types/workflow.type";
 
-export async function UpdateWorkflow(id: string, definition: string) {
+export async function UpdateWorkflow({
+  id,
+  definition,
+}: {
+  id: string;
+  definition: string;
+}) {
   try {
     const session = await getServerSession();
     if (!session?.user) {
