@@ -6,7 +6,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { ParamProps } from "@/types/app-node.type";
 import { useEffect, useId, useState } from "react";
 
-function StringParam({ param, value, updateNodeParamValue }: ParamProps) {
+function StringParam({
+  param,
+  value,
+  disabled,
+  updateNodeParamValue,
+}: ParamProps) {
   const id = useId();
   const [internalValue, setInternalValue] = useState(value);
 
@@ -31,6 +36,7 @@ function StringParam({ param, value, updateNodeParamValue }: ParamProps) {
         onBlur={() => updateNodeParamValue(internalValue)}
         placeholder="Enter value here"
         className="bg-white text-xs"
+        disabled={disabled}
       />
       {param.helperText && (
         <p className="px-2 text-muted-foreground/70">{param.helperText}</p>
