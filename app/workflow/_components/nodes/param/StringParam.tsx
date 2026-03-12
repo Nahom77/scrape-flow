@@ -2,6 +2,7 @@
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { ParamProps } from "@/types/app-node.type";
 import { useEffect, useId, useState } from "react";
 
@@ -13,16 +14,20 @@ function StringParam({ param, value, updateNodeParamValue }: ParamProps) {
     setInternalValue(value);
   }, [value]);
 
+  const Component: any = param.variant === "textarea" ? Textarea : Input;
+
   return (
     <div className="w-full p-1 space-y-1">
       <Label htmlFor={id} className="flex text-xs">
         {param.name}
         {param.required && <p className="text-destructive">*</p>}
       </Label>
-      <Input
+      <Component
         id={id}
         value={internalValue}
-        onChange={(e) => setInternalValue(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setInternalValue(e.target.value)
+        }
         onBlur={() => updateNodeParamValue(internalValue)}
         placeholder="Enter value here"
         className="bg-white text-xs"
