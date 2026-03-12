@@ -23,8 +23,9 @@ function TaskMenu() {
           <AccordionTrigger className="font-bold">
             Data Extraction
           </AccordionTrigger>
-          <AccordionContent>
+          <AccordionContent className="space-y-2">
             <TaskMenuBtn taskType={TaskType.PAGE_TO_HTML} />
+            <TaskMenuBtn taskType={TaskType.EXTRACT_TEXT_FROM_ELEMENT} />
           </AccordionContent>
         </AccordionItem>
       </Accordion>

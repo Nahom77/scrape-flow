@@ -46,6 +46,7 @@ function NodeParamField({
       return (
         <BrowserInstanceParam
           param={param}
+          value=""
           updateNodeParamValue={updateNodeParamValue}
         />
       );

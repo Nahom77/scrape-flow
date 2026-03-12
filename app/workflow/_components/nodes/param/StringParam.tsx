@@ -3,11 +3,16 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ParamProps } from "@/types/app-node.type";
-import { useId, useState } from "react";
+import { useEffect, useId, useState } from "react";
 
 function StringParam({ param, value, updateNodeParamValue }: ParamProps) {
   const id = useId();
   const [internalValue, setInternalValue] = useState(value);
+
+  useEffect(() => {
+    setInternalValue(value);
+  }, [value]);
+
   return (
     <div className="w-full p-1 space-y-1">
       <Label htmlFor={id} className="flex text-xs">
