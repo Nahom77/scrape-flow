@@ -6,6 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { CoinsIcon, CopyIcon, GripVerticalIcon, TrashIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useReactFlow } from "@xyflow/react";
+import { CreateFlowNode } from "@/lib/workflow/createFlowNode";
+import { AppNode } from "@/types/app-node.type";
 
 function NodeHeader({
   taskType,
@@ -15,7 +17,18 @@ function NodeHeader({
   nodeId: string;
 }) {
   const task = TaskRegistry[taskType];
-  const { deleteElements } = useReactFlow();
+  const { deleteElements, getNode, addNodes } = useReactFlow();
+
+  const handleDuplication = () => {
+    const node = getNode(nodeId) as AppNode;
+
+    const newX = node?.position.x;
+    const newY = node?.position.y + (node.measured?.height ?? 30) + 20;
+
+    const newNode = CreateFlowNode(node?.data.type, { x: newX, y: newY });
+
+    addNodes([newNode]);
+  };
   return (
     <div className="p-2 flex items-center gap-2">
       <task.icon size={16} />
@@ -42,7 +55,11 @@ function NodeHeader({
               >
                 <TrashIcon size={12} className="text-destructive" />
               </Button>
-              <Button variant={"ghost"} size={"icon-xs"}>
+              <Button
+                onClick={handleDuplication}
+                variant={"ghost"}
+                size={"icon-xs"}
+              >
                 <CopyIcon size={12} />
               </Button>
             </>
