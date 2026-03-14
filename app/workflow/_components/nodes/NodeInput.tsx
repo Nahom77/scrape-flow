@@ -7,7 +7,6 @@ import { ColorForHandle } from "./common";
 
 function NodeInput({ input, nodeId }: { input: TaskParam; nodeId: string }) {
   const edges = useEdges();
-  console.log(edges);
   const isConnected = edges.some(
     (edge) => edge.target === nodeId && edge.targetHandle === input.name,
   );

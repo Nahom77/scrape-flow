@@ -8,6 +8,7 @@ import {
   Connection,
   Controls,
   Edge,
+  getOutgoers,
   ReactFlow,
   useEdgesState,
   useNodesState,
@@ -20,6 +21,7 @@ import { TaskType } from "@/types/tast.type";
 import { CreateFlowNode } from "@/lib/workflow/createFlowNode";
 import { AppNode } from "@/types/app-node.type";
 import DeletableEdge from "./edges/DeletableEdge";
+import { TaskRegistry } from "@/lib/workflow/task/registry";
 
 interface Props {
   workflow: Workflow;
@@ -48,8 +50,7 @@ function FlowEditor({ workflow }: Props) {
 
       setNodes(flow.nodes || []);
       setEdges(flow.edges || []);
-    } catch (error) {
-      console.log(error);
+    } catch {
       toast.error("Something went wrong");
     }
   }, [workflow.definition, setNodes, setEdges]);
@@ -84,7 +85,6 @@ function FlowEditor({ workflow }: Props) {
       const node = nodes.find((nd) => nd.id === connection.target);
       if (!node) return;
 
-      console.log(connection);
       const nodeInputs = node.data.inputs;
       updateNodeData(node.id, {
         inputs: {
@@ -94,6 +94,46 @@ function FlowEditor({ workflow }: Props) {
       });
     },
     [setEdges, nodes, updateNodeData],
+  );
+
+  const isValidConnection = useCallback(
+    (connection: Edge | Connection) => {
+      if (connection.source === connection.target) {
+        return false;
+      }
+
+      const source = nodes.find((nd) => nd.id === connection.source);
+      const target = nodes.find((nd) => nd.id === connection.target);
+      if (!source || !target) return false;
+
+      const sourceTask = TaskRegistry[source.data.type];
+      const targetTask = TaskRegistry[target.data.type];
+
+      const output = sourceTask.outputs.find(
+        (opt) => opt.name === connection.sourceHandle,
+      );
+      const input = targetTask.inputs.find(
+        (ipt) => ipt.name === connection.targetHandle,
+      );
+
+      if (input?.type !== output?.type) {
+        return false;
+      }
+
+      const hasCycle = (node: AppNode, visited = new Set()) => {
+        if (visited.has(node.id)) return false;
+        visited.add(node.id);
+
+        for (const outgoer of getOutgoers(node, nodes, edges)) {
+          if (outgoer.id === connection.source) return true;
+          if (hasCycle(outgoer, visited)) return true;
+        }
+      };
+
+      const detectedCycle = hasCycle(target);
+      return !detectedCycle;
+    },
+    [nodes, edges],
   );
 
   return (
@@ -112,6 +152,7 @@ function FlowEditor({ workflow }: Props) {
         onDragOver={handleDragOver}
         onDrop={handleDrop}
         onConnect={onConnect}
+        isValidConnection={isValidConnection}
       >
         <Controls position="top-left" fitViewOptions={fitViewOptions} />
         <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
