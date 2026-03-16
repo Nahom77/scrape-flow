@@ -38,9 +38,9 @@ function NodeHeader({
         </p>
         <div className="flex items-center gap-1">
           {task.isEntryPoint && <Badge>Entry point</Badge>}
-          <Badge className="flex items-center gap-2 text-xs">
+          <Badge className="flex items-center gap-1 text-xs">
             <CoinsIcon size={16} />
-            TODO
+            {task.credits}
           </Badge>
           {!task.isEntryPoint && (
             <>
