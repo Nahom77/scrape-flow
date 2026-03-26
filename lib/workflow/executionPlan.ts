@@ -60,7 +60,37 @@ export function FlowToExecutionPlan(
 }
 
 function getInvalidInputs(node: AppNode, edges: Edge[], planned: Set<string>) {
-  const invalidInputs: string[] = [];
+  const invalidInputs = [];
+
+  const inputs = TaskRegistry[node.data.type].inputs;
+  for (const input of inputs) {
+    const inputValue = node.data.inputs[input.name];
+    const inputValueProvided = inputValue?.length > 0;
+    if (inputValueProvided) {
+      continue;
+    }
+
+    const incomingEdges = edges.filter((edge) => edge.target === node.id);
+
+    const inputLinkedToOutput = incomingEdges.find(
+      (edge) => edge.targetHandle === input.name,
+    );
+
+    const requiredInputProvidedByVisitedOutput =
+      input.required &&
+      inputLinkedToOutput &&
+      planned.has(inputLinkedToOutput.source);
+
+    if (requiredInputProvidedByVisitedOutput) {
+      continue;
+    } else if (!input.required) {
+      if (!inputLinkedToOutput) continue;
+      if (inputLinkedToOutput && planned.has(inputLinkedToOutput.source))
+        continue;
+    }
+
+    invalidInputs.push(input.name);
+  }
 
   return invalidInputs;
 }
