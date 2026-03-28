@@ -1,5 +1,6 @@
 "use client";
 
+import useFlowValidation from "@/hooks/useFlowValidation";
 import { cn } from "@/lib/utils";
 import { useReactFlow } from "@xyflow/react";
 import { ReactNode } from "react";
@@ -14,6 +15,8 @@ function NodeCard({
   isSelected: boolean;
 }) {
   const { getNode, setCenter } = useReactFlow();
+  const { invalidInputs } = useFlowValidation();
+  const hasInvalidInputs = invalidInputs.some((node) => node.nodeId === nodeId);
 
   const centerTheNode = (nodeId: string) => {
     const node = getNode(nodeId);
@@ -40,6 +43,7 @@ function NodeCard({
       className={cn(
         "w-105 flex flex-col gap-1 bg-background border-2 rounded-md text-xs cursor-pointer border-separate",
         isSelected && "border-primary",
+        hasInvalidInputs && "border-destructive",
       )}
     >
       {children}
