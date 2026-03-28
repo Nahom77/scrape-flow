@@ -15,7 +15,7 @@ type FlowValidationContextType = {
 export const FlowValidationContext =
   createContext<FlowValidationContextType | null>(null);
 
-export function FlowValidtionContextProvider({
+export function FlowValidationContextProvider({
   children,
 }: {
   children: React.ReactNode;
