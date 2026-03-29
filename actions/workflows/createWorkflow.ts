@@ -51,7 +51,7 @@ export async function CreateWorkflow(
         throw new Error("Workflow with this name already exists");
       }
     }
-  }
 
-  throw new Error("Something went wrong. Please try again.");
+    throw new Error("Something went wrong. Please try again.");
+  }
 }
