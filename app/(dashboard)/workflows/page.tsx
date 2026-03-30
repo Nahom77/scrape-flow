@@ -5,6 +5,12 @@ import { AlertCircle, InboxIcon } from "lucide-react";
 import React, { Suspense } from "react";
 import CreateWorkflowDialog from "./_components/CreateWorkflowDialog";
 import WorkflowCard from "./_components/WorkflowCard";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Workflows",
+  description: "Manage workflows",
+};
 
 function page() {
   return (
@@ -56,11 +62,13 @@ async function UserWorkflows() {
         </div>
       );
 
-    return <div className="gap-4 grid grid-cols-1">{workflows.map(workflow => (
-      <WorkflowCard key={workflow.id} workflow={workflow} />
-    )
-    )
-    }</div>;
+    return (
+      <div className="gap-4 grid grid-cols-1">
+        {workflows.map((workflow) => (
+          <WorkflowCard key={workflow.id} workflow={workflow} />
+        ))}
+      </div>
+    );
   } catch {
     return (
       <Alert variant={"destructive"}>
