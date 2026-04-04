@@ -7,10 +7,10 @@ import CreateWorkflowDialog from "./_components/CreateWorkflowDialog";
 import WorkflowCard from "./_components/WorkflowCard";
 import { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Workflows",
-  description: "Manage workflows",
-};
+// export const metadata: Metadata = {
+//   title: "Workflows",
+//   description: "Manage workflows",
+// };
 
 function page() {
   return (

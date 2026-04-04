@@ -21,7 +21,7 @@ import {
 } from "./ui/sheet";
 import { useState } from "react";
 
-const routes = [
+export const routes = [
   {
     href: "/",
     label: "Home",
