@@ -3,6 +3,7 @@
 import { getServerSession } from "@/lib/get-session";
 import prisma from "@/lib/prisma";
 import { FlowToExecutionPlan } from "@/lib/workflow/executionPlan";
+import { TaskRegistry } from "@/lib/workflow/task/registry";
 import { WorkflowExecutionPlan } from "@/types/workflow.type";
 
 export async function RunWorkflow(form: {
@@ -46,5 +47,34 @@ export async function RunWorkflow(form: {
 
   executionPlan = result.executionPlan;
 
-  console.log(executionPlan);
+  const execution = await prisma.worfklowExecution.create({
+    data: {
+      workflowId,
+      userId: session.user.id,
+      status: "PENDING",
+      startedAt: new Date(),
+      trigger: "MANUAL",
+      phases: {
+        create: executionPlan.flatMap((phase) => {
+          return phase.nodes.flatMap((node) => {
+            return {
+              userId: session.user.id,
+              status: "CREATED",
+              number: phase.phase,
+              node: JSON.stringify(node),
+              name: TaskRegistry[node.data.type].label,
+            };
+          });
+        }),
+      },
+    },
+    select: {
+      id: true,
+      phases: true,
+    },
+  });
+
+  if (!execution) {
+    throw new Error("workflow execution not created");
+  }
 }
