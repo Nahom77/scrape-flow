@@ -4,7 +4,12 @@ import { getServerSession } from "@/lib/get-session";
 import prisma from "@/lib/prisma";
 import { FlowToExecutionPlan } from "@/lib/workflow/executionPlan";
 import { TaskRegistry } from "@/lib/workflow/task/registry";
-import { WorkflowExecutionPlan } from "@/types/workflow.type";
+import {
+  ExecutionPhaseStatus,
+  WorkflowExecutionPlan,
+  WorkflowExecutionStatus,
+  WorkflowExecutionTrigger,
+} from "@/types/workflow.type";
 
 export async function RunWorkflow(form: {
   workflowId: string;
@@ -51,15 +56,15 @@ export async function RunWorkflow(form: {
     data: {
       workflowId,
       userId: session.user.id,
-      status: "PENDING",
+      status: WorkflowExecutionStatus.PENDING,
       startedAt: new Date(),
-      trigger: "MANUAL",
+      trigger: WorkflowExecutionTrigger.MANUAL,
       phases: {
         create: executionPlan.flatMap((phase) => {
           return phase.nodes.flatMap((node) => {
             return {
               userId: session.user.id,
-              status: "CREATED",
+              status: ExecutionPhaseStatus.CREATED,
               number: phase.phase,
               node: JSON.stringify(node),
               name: TaskRegistry[node.data.type].label,
