@@ -14,7 +14,7 @@ import {
 export async function RunWorkflow(form: {
   workflowId: string;
   flowDefinition?: string;
-}) {
+}): Promise<{ path: string }> {
   const session = await getServerSession();
   if (!session?.user) {
     throw new Error("unauthenticated");
@@ -82,4 +82,6 @@ export async function RunWorkflow(form: {
   if (!execution) {
     throw new Error("workflow execution not created");
   }
+
+  return { path: `/workflow/runs/${workflowId}/${execution.id}` };
 }
