@@ -3,6 +3,7 @@ import { GetWorkflowExecutionWithPhases } from "@/actions/workflows/getWorkflowE
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { DatesToDurationString } from "@/lib/helper/date";
 import { WorkflowExecutionStatus } from "@/types/workflow.type";
 import { useQuery } from "@tanstack/react-query";
 import { formatDistanceToNow } from "date-fns";
@@ -11,6 +12,7 @@ import {
   CircleDashedIcon,
   ClockIcon,
   CoinsIcon,
+  Loader2Icon,
   LucideIcon,
   WorkflowIcon,
 } from "lucide-react";
@@ -26,6 +28,9 @@ function ExecutionViewer({ initialData }: { initialData: ExecutionData }) {
     refetchInterval: (q) =>
       q.state.data?.status === WorkflowExecutionStatus.RUNNING ? 1000 : false,
   });
+
+  const duration = DatesToDurationString(data?.completedAt, data?.startedAt);
+
   return (
     <div className="w-full h-full flex">
       <aside className="w-110 min-w-110 max-w-110 overflow-hidden flex flex-col border-r-2 border-separate grow">
@@ -48,7 +53,11 @@ function ExecutionViewer({ initialData }: { initialData: ExecutionData }) {
               </span>
             }
           />
-          <ExecutionLabel icon={ClockIcon} label="Duration" value={"TODO"} />
+          <ExecutionLabel
+            icon={ClockIcon}
+            label="Duration"
+            value={duration || <Loader2Icon className="animate-spin" />}
+          />
           <ExecutionLabel
             icon={CoinsIcon}
             label="Credits consumed"
