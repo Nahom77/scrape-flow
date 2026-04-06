@@ -1,4 +1,6 @@
-import React from "react";
+import Topbar from "@/app/workflow/_components/topbar/Topbar";
+import { Loader2Icon } from "lucide-react";
+import React, { Suspense } from "react";
 
 async function ExecutionViewerPage({
   params,
@@ -7,7 +9,35 @@ async function ExecutionViewerPage({
 }) {
   const param = await params;
 
-  return <div></div>;
+  return (
+    <div className="w-full h-screen overflow-hidden flex flex-col">
+      <Topbar
+        workflowId={param.workflowId}
+        title="Workflow run details"
+        subtitle={`Run ID: ${param.executionId}`}
+        hideButtons
+      />
+      <section className="h-full overflow-auto flex">
+        <Suspense
+          fallback={
+            <div className="w-full flex justify-center items-center">
+              <Loader2Icon className="size-10 stroke-primary animate-spin" />
+            </div>
+          }
+        >
+          <ExecutionViewerWrapper executionId={param.executionId} />
+        </Suspense>
+      </section>
+    </div>
+  );
 }
 
 export default ExecutionViewerPage;
+
+async function ExecutionViewerWrapper({
+  executionId,
+}: {
+  executionId: string;
+}) {
+  return <div>Wrapper</div>;
+}

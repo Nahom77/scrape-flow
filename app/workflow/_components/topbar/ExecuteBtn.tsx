@@ -21,8 +21,7 @@ function ExecuteBtn({ workflowId }: { workflowId: string }) {
       toast.success("Execution started", { id: "flow-execution" });
       router.push(data.path);
     },
-    onError: (err) => {
-      console.log(err);
+    onError: () => {
       toast.error("Something went wrong", { id: "flow-execution" });
     },
   });
