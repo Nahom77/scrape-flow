@@ -56,7 +56,7 @@ function ExecutionViewer({ initialData }: { initialData: ExecutionData }) {
           <ExecutionLabel
             icon={ClockIcon}
             label="Duration"
-            value={duration || <Loader2Icon className="animate-spin" />}
+            value={duration ?? <Loader2Icon className="animate-spin" />}
           />
           <ExecutionLabel
             icon={CoinsIcon}
