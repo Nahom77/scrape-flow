@@ -1,9 +1,20 @@
 "use client";
 import { GetWorkflowExecutionWithPhases } from "@/actions/workflows/getWorkflowExecutionWithPhases";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { WorkflowExecutionStatus } from "@/types/workflow.type";
 import { useQuery } from "@tanstack/react-query";
-import { CircleDashedIcon, LucideIcon } from "lucide-react";
-import React from "react";
+import { formatDistanceToNow } from "date-fns";
+import {
+  CalendarIcon,
+  CircleDashedIcon,
+  ClockIcon,
+  CoinsIcon,
+  LucideIcon,
+  WorkflowIcon,
+} from "lucide-react";
+import React, { ReactNode } from "react";
 
 type ExecutionData = Awaited<ReturnType<typeof GetWorkflowExecutionWithPhases>>;
 
@@ -24,6 +35,47 @@ function ExecutionViewer({ initialData }: { initialData: ExecutionData }) {
             label="Status"
             value={data?.status}
           />
+          <ExecutionLabel
+            icon={CalendarIcon}
+            label="Started at"
+            value={
+              <span className="lowercase">
+                {data?.startedAt
+                  ? formatDistanceToNow(new Date(data.startedAt), {
+                      addSuffix: true,
+                    })
+                  : "-"}
+              </span>
+            }
+          />
+          <ExecutionLabel icon={ClockIcon} label="Duration" value={"TODO"} />
+          <ExecutionLabel
+            icon={CoinsIcon}
+            label="Credits consumed"
+            value={"TODO"}
+          />
+        </div>
+
+        <Separator />
+
+        <div className="px-4 py-2 flex justify-center items-center">
+          <div className="flex items-center gap-2 text-muted-foreground">
+            <WorkflowIcon size={20} className="stroke-muted-foreground/80" />
+            <span className="font-semibold">Phases</span>
+          </div>
+        </div>
+        <Separator />
+        <div className="h-full overflow-auto px-2 py-4">
+          {data?.phases.map((phase, index) => (
+            <Button
+              key={phase.id}
+              variant={"ghost"}
+              className="w-full justify-start"
+            >
+              <Badge variant={"outline"}>{index + 1}</Badge>
+              <p className="font-semibold">{phase.name}</p>
+            </Button>
+          ))}
         </div>
       </aside>
     </div>
@@ -38,8 +90,8 @@ function ExecutionLabel({
   value,
 }: {
   icon: LucideIcon;
-  label: string;
-  value?: string;
+  label: ReactNode;
+  value?: ReactNode;
 }) {
   const Icon = icon;
   return (
