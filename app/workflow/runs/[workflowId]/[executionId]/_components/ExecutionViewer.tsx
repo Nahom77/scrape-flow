@@ -1,5 +1,6 @@
 "use client";
 import { GetWorkflowExecutionWithPhases } from "@/actions/workflows/getWorkflowExecutionWithPhases";
+import { GetWorkflowPhaseDetails } from "@/actions/workflows/getWorkflowPhaseDetails";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -17,11 +18,12 @@ import {
   LucideIcon,
   WorkflowIcon,
 } from "lucide-react";
-import React, { ReactNode } from "react";
+import React, { ReactNode, useState } from "react";
 
 type ExecutionData = Awaited<ReturnType<typeof GetWorkflowExecutionWithPhases>>;
 
 function ExecutionViewer({ initialData }: { initialData: ExecutionData }) {
+  const [selectedPhase, setSelectedPhase] = useState<string | null>(null);
   const { data } = useQuery({
     queryKey: ["execution", initialData?.id],
     initialData,
@@ -30,6 +32,13 @@ function ExecutionViewer({ initialData }: { initialData: ExecutionData }) {
       q.state.data?.status === WorkflowExecutionStatus.RUNNING ? 1000 : false,
   });
 
+  const { data: PhaseDetails } = useQuery({
+    queryKey: ["phaseDetails", selectedPhase],
+    enabled: selectedPhase !== null,
+    queryFn: () => GetWorkflowPhaseDetails(selectedPhase!),
+  });
+
+  const isRunning = data?.status === WorkflowExecutionStatus.RUNNING;
   const duration = DatesToDurationString(data?.completedAt, data?.startedAt);
   const creditsConsumed = GetPhasesTotalCost(data?.phases || []);
 
@@ -80,15 +89,23 @@ function ExecutionViewer({ initialData }: { initialData: ExecutionData }) {
           {data?.phases.map((phase, index) => (
             <Button
               key={phase.id}
-              variant={"ghost"}
-              className="w-full justify-start"
+              variant={selectedPhase === phase.id ? "default" : "ghost"}
+              onClick={() => {
+                if (isRunning) return;
+                setSelectedPhase(phase.id);
+              }}
+              className="w-full justify-between"
             >
-              <Badge variant={"outline"}>{index + 1}</Badge>
-              <p className="font-semibold">{phase.name}</p>
+              <div className="flex items-center gap-2">
+                <Badge variant={"outline"}>{index + 1}</Badge>
+                <p className="font-semibold">{phase.name}</p>
+              </div>
+              <p className="text-muted-foreground text-xs">{phase.status}</p>
             </Button>
           ))}
         </div>
       </aside>
+      <div className="w-full h-full flex">{PhaseDetails?.userId}</div>
     </div>
   );
 }
