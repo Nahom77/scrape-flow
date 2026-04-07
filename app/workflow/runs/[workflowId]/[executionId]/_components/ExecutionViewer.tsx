@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { DatesToDurationString } from "@/lib/helper/date";
+import { GetPhasesTotalCost } from "@/lib/helper/phases";
 import { WorkflowExecutionStatus } from "@/types/workflow.type";
 import { useQuery } from "@tanstack/react-query";
 import { formatDistanceToNow } from "date-fns";
@@ -30,6 +31,7 @@ function ExecutionViewer({ initialData }: { initialData: ExecutionData }) {
   });
 
   const duration = DatesToDurationString(data?.completedAt, data?.startedAt);
+  const creditsConsumed = GetPhasesTotalCost(data?.phases || []);
 
   return (
     <div className="w-full h-full flex">
@@ -61,7 +63,7 @@ function ExecutionViewer({ initialData }: { initialData: ExecutionData }) {
           <ExecutionLabel
             icon={CoinsIcon}
             label="Credits consumed"
-            value={"TODO"}
+            value={creditsConsumed}
           />
         </div>
 
