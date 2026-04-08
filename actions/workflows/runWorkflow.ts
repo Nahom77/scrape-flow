@@ -2,6 +2,7 @@
 
 import { getServerSession } from "@/lib/get-session";
 import prisma from "@/lib/prisma";
+import { ExecuteWorkflow } from "@/lib/workflow/executeWorkflow";
 import { FlowToExecutionPlan } from "@/lib/workflow/executionPlan";
 import { TaskRegistry } from "@/lib/workflow/task/registry";
 import {
@@ -83,6 +84,6 @@ export async function RunWorkflow(form: {
     throw new Error("workflow execution not created");
   }
 
-  // ExecuteWorkflow(execution.id)
+  ExecuteWorkflow(execution.id);
   return { path: `/workflow/runs/${workflowId}/${execution.id}` };
 }
