@@ -12,9 +12,10 @@ export async function GetWorkflowPhaseDetails(phaseId: string) {
   return prisma.executionPhase.findUnique({
     where: {
       id: phaseId,
-      execution: {
-        userId: session.user.id,
-      },
+      userId: session.user.id,
+      // execution: {
+      //   userId: session.user.id,
+      // },
     },
   });
 }

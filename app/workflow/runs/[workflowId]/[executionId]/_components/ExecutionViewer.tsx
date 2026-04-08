@@ -105,7 +105,9 @@ function ExecutionViewer({ initialData }: { initialData: ExecutionData }) {
           ))}
         </div>
       </aside>
-      <div className="w-full h-full flex">{PhaseDetails?.userId}</div>
+      <div className="w-full h-full flex">
+        <pre>{JSON.stringify(PhaseDetails, null, 4)}</pre>
+      </div>
     </div>
   );
 }

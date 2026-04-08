@@ -25,7 +25,7 @@ model User {
   sessions      Session[]
   accounts      Account[]
   workflows     Workflow[]
-  workflowExecution WorfklowExecution[]
+  workflowExecution WorkflowExecution[]
   executionPhase ExecutionPhase[]
   
 
@@ -94,14 +94,14 @@ model Workflow {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  executions WorfklowExecution[]
+  executions WorkflowExecution[]
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([name, userId])
 }
 
-model WorfklowExecution {
+model WorkflowExecution {
   id String @id @default(cuid())
   workflowId String
   userId String
@@ -130,8 +130,8 @@ model ExecutionPhase {
   outputs String?
 
   creditsCost Int?
-  worfklowExecutionId String
+  workflowExecutionId String
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  execution WorfklowExecution @relation(fields: [worfklowExecutionId], references: [id], onDelete: Cascade)
+  execution WorkflowExecution @relation(fields: [workflowExecutionId], references: [id], onDelete: Cascade)
 }

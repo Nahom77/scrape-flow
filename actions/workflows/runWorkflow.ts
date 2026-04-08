@@ -52,7 +52,7 @@ export async function RunWorkflow(form: {
 
   executionPlan = result.executionPlan;
 
-  const execution = await prisma.worfklowExecution.create({
+  const execution = await prisma.workflowExecution.create({
     data: {
       workflowId,
       userId: session.user.id,
@@ -83,5 +83,6 @@ export async function RunWorkflow(form: {
     throw new Error("workflow execution not created");
   }
 
+  // ExecuteWorkflow(execution.id)
   return { path: `/workflow/runs/${workflowId}/${execution.id}` };
 }
