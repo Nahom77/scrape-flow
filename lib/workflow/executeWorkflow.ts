@@ -153,11 +153,12 @@ async function executeWorkflowPhase(
 
   const success = await executePhase(phase, node, environment);
 
-  await finalizePhase(phase.id, success);
+  const outputs = environment.phases[node.id].outputs;
+  await finalizePhase(phase.id, success, outputs);
   return { success };
 }
 
-async function finalizePhase(phaseId: string, success: boolean) {
+async function finalizePhase(phaseId: string, success: boolean, outputs: any) {
   const finalStatus = success
     ? ExecutionPhaseStatus.COMPLETED
     : ExecutionPhaseStatus.FAILED;
@@ -169,6 +170,7 @@ async function finalizePhase(phaseId: string, success: boolean) {
     data: {
       status: finalStatus,
       completedAt: new Date(),
+      outputs: JSON.stringify(outputs),
     },
   });
 }
@@ -206,6 +208,8 @@ function setUpEnvironmentForPhase(node: AppNode, environment: Environment) {
 function createExecutionEnvironment(node: AppNode, environment: Environment) {
   return {
     getInput: (name: string) => environment.phases[node.id].inputs[name],
+    setOutput: (name: string, value: string) =>
+      (environment.phases[node.id].outputs[name] = value),
 
     getBrowser: () => environment.browser,
     setBrowser: (browser: Browser) => (environment.browser = browser),
