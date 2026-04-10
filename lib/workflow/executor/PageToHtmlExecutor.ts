@@ -5,7 +5,7 @@ export async function PageToHtmlExecutor(
   environment: ExecutionEnvironment<typeof PageToHtmlTask>,
 ): Promise<boolean> {
   try {
-    const websiteUrl = environment.getInput("Web page");
+    const browser = environment.getBrowser();
     // console.log(websiteUrl);
 
     return true;

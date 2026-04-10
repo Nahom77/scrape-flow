@@ -10,6 +10,8 @@ import { AppNode } from "@/types/app-node.type";
 import { TaskRegistry } from "./task/registry";
 import { ExecutorRegistry } from "./executor/registry";
 import { Environment, ExecutionEnvironment } from "@/types/executor.type";
+import { TaskParamType } from "@/types/tast.type";
+import { Browser } from "puppeteer";
 
 export async function ExecuteWorkflow(executionId: string) {
   const execution = await prisma.workflowExecution.findUnique({
@@ -190,6 +192,7 @@ function setUpEnvironmentForPhase(node: AppNode, environment: Environment) {
   const inputs = TaskRegistry[node.data.type].inputs;
 
   for (const input of inputs) {
+    if (input.type === TaskParamType.BROWSER_INSTANCE) continue;
     const inputValue = node.data.inputs[input.name];
     if (inputValue) {
       environment.phases[node.id].inputs[input.name] = inputValue;
@@ -201,5 +204,8 @@ function setUpEnvironmentForPhase(node: AppNode, environment: Environment) {
 function createExecutionEnvironment(node: AppNode, environment: Environment) {
   return {
     getInput: (name: string) => environment.phases[node.id].inputs[name],
+
+    getBrowser: () => environment.browser,
+    setBrowser: (browser: Browser) => (environment.browser = browser),
   };
 }
