@@ -11,7 +11,7 @@ import { TaskRegistry } from "./task/registry";
 import { ExecutorRegistry } from "./executor/registry";
 import { Environment, ExecutionEnvironment } from "@/types/executor.type";
 import { TaskParamType } from "@/types/tast.type";
-import { Browser } from "puppeteer";
+import { Browser, Page } from "puppeteer";
 
 export async function ExecuteWorkflow(executionId: string) {
   const execution = await prisma.workflowExecution.findUnique({
@@ -207,5 +207,8 @@ function createExecutionEnvironment(node: AppNode, environment: Environment) {
 
     getBrowser: () => environment.browser,
     setBrowser: (browser: Browser) => (environment.browser = browser),
+
+    getPage: () => environment.page,
+    setPage: (page: Page) => (environment.page = page),
   };
 }
