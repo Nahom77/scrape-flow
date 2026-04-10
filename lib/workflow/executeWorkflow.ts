@@ -140,6 +140,7 @@ async function executeWorkflowPhase(
     data: {
       status: ExecutionPhaseStatus.RUNNING,
       startedAt,
+      inputs: JSON.stringify(environment.phases[node.id].inputs),
     },
   });
 
@@ -178,10 +179,8 @@ async function executePhase(
     return false;
   }
 
-  const executionEnvironment: ExecutionEnvironment = createExecutionEnvironment(
-    node,
-    environment,
-  );
+  const executionEnvironment: ExecutionEnvironment<any> =
+    createExecutionEnvironment(node, environment);
 
   return await runFn(executionEnvironment);
 }
