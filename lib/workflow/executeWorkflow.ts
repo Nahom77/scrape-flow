@@ -13,6 +13,8 @@ import { Environment, ExecutionEnvironment } from "@/types/executor.type";
 import { TaskParamType } from "@/types/tast.type";
 import { Browser, Page } from "puppeteer";
 import { Edge } from "@xyflow/react";
+import { LogCollector } from "@/types/log.type";
+import { createLogCollector } from "../log";
 
 export async function ExecuteWorkflow(executionId: string) {
   const execution = await prisma.workflowExecution.findUnique({
@@ -34,6 +36,8 @@ export async function ExecuteWorkflow(executionId: string) {
   await initializeWorkflowExecution(executionId, execution.workflowId);
   await initializePhaseStatuses(execution);
 
+  const logCollector = createLogCollector()
+
   let creditsConsumed = 0;
   let executionFailed = false;
 
@@ -43,7 +47,8 @@ export async function ExecuteWorkflow(executionId: string) {
     const phaseExecution = await executeWorkflowPhase(
       phase,
       environment,
-      edges,
+      edges, 
+      logCollector
     );
     if (!phaseExecution.success) {
       executionFailed = true;
@@ -139,6 +144,7 @@ async function executeWorkflowPhase(
   phase: ExecutionPhase,
   environment: Environment,
   edges: Edge[],
+  logCollector: LogCollector
 ) {
   const startedAt = new Date();
   const node = JSON.parse(phase.node) as AppNode;
@@ -159,7 +165,7 @@ async function executeWorkflowPhase(
   const creditsRequried = TaskRegistry[node.data.type].credits;
   console.log(`executing phase ${phase.name}`);
 
-  const success = await executePhase(phase, node, environment);
+  const success = await executePhase(phase, node, environment, logCollector);
 
   const outputs = environment.phases[node.id].outputs;
   await finalizePhase(phase.id, success, outputs);
@@ -187,6 +193,7 @@ async function executePhase(
   phase: ExecutionPhase,
   node: AppNode,
   environment: Environment,
+  logCollector: LogCollector
 ): Promise<boolean> {
   const runFn = ExecutorRegistry[node.data.type];
   if (!runFn) {
@@ -194,7 +201,7 @@ async function executePhase(
   }
 
   const executionEnvironment: ExecutionEnvironment<any> =
-    createExecutionEnvironment(node, environment);
+    createExecutionEnvironment(node, environment, logCollector);
 
   return await runFn(executionEnvironment);
 }
@@ -229,7 +236,7 @@ function setUpEnvironmentForPhase(
   }
 }
 
-function createExecutionEnvironment(node: AppNode, environment: Environment) {
+function createExecutionEnvironment(node: AppNode, environment: Environment, LogCollector: LogCollector) {
   return {
     getInput: (name: string) => environment.phases[node.id].inputs[name],
     setOutput: (name: string, value: string) =>
@@ -240,6 +247,8 @@ function createExecutionEnvironment(node: AppNode, environment: Environment) {
 
     getPage: () => environment.page,
     setPage: (page: Page) => (environment.page = page),
+
+    log: LogCollector
   };
 }
 
