@@ -105,8 +105,49 @@ function ExecutionViewer({ initialData }: { initialData: ExecutionData }) {
           ))}
         </div>
       </aside>
-      <div className="w-full h-full flex">
-        <pre>{JSON.stringify(PhaseDetails, null, 4)}</pre>
+      <div className="w-full h-full px-4 flex">
+        {isRunning && (
+          <div className="w-full h-full flex flex-col justify-center items-center gap-2">
+            <p className="font-bold">Run is in progress, please wait</p>
+          </div>
+        )}
+
+        {!isRunning && !selectedPhase && (
+          <div className="w-full h-full flex flex-col justify-center items-center gap-2">
+            <div className="flex flex-col gap-1 text-center">
+              <p className="font-bold">No phase selected</p>
+              <p className="text-muted-foreground text-sm">
+                Select a phase to view details
+              </p>
+            </div>
+          </div>
+        )}
+
+        {!isRunning && selectedPhase && PhaseDetails && (
+          <div className="overflow-auto py-4 flex flex-col gap-4 container">
+            <div className="flex items-center gap-2">
+              <Badge variant={"outline"} className="space-x-4">
+                <div className="flex items-center gap-1">
+                  <CoinsIcon size={18} className="stroke-muted-foreground" />
+                  <span>Credits</span>
+                </div>
+                <span>TODO</span>
+              </Badge>
+              <Badge variant={"outline"} className="space-x-4">
+                <div className="flex items-center gap-1">
+                  <ClockIcon size={18} className="stroke-muted-foreground" />
+                  <span>Duration</span>
+                </div>
+                <span>
+                  {DatesToDurationString(
+                    PhaseDetails.completedAt,
+                    PhaseDetails.startedAt,
+                  ) || "-"}
+                </span>
+              </Badge>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
