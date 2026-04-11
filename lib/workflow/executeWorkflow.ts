@@ -12,6 +12,7 @@ import { ExecutorRegistry } from "./executor/registry";
 import { Environment, ExecutionEnvironment } from "@/types/executor.type";
 import { TaskParamType } from "@/types/tast.type";
 import { Browser, Page } from "puppeteer";
+import { Edge } from "@xyflow/react";
 
 export async function ExecuteWorkflow(executionId: string) {
   const execution = await prisma.workflowExecution.findUnique({
@@ -36,8 +37,14 @@ export async function ExecuteWorkflow(executionId: string) {
   let creditsConsumed = 0;
   let executionFailed = false;
 
+  const edges = JSON.parse(execution.definition).edges as Edge[];
+
   for (const phase of execution.phases) {
-    const phaseExecution = await executeWorkflowPhase(phase, environment);
+    const phaseExecution = await executeWorkflowPhase(
+      phase,
+      environment,
+      edges,
+    );
     if (!phaseExecution.success) {
       executionFailed = true;
       break;
@@ -131,11 +138,12 @@ async function finalizeWorkflowExecution(
 async function executeWorkflowPhase(
   phase: ExecutionPhase,
   environment: Environment,
+  edges: Edge[],
 ) {
   const startedAt = new Date();
   const node = JSON.parse(phase.node) as AppNode;
 
-  setUpEnvironmentForPhase(node, environment);
+  setUpEnvironmentForPhase(node, environment, edges);
 
   await prisma.executionPhase.update({
     where: {
@@ -191,7 +199,11 @@ async function executePhase(
   return await runFn(executionEnvironment);
 }
 
-function setUpEnvironmentForPhase(node: AppNode, environment: Environment) {
+function setUpEnvironmentForPhase(
+  node: AppNode,
+  environment: Environment,
+  edges: Edge[],
+) {
   environment.phases[node.id] = { inputs: {}, outputs: {} };
   const inputs = TaskRegistry[node.data.type].inputs;
 
@@ -202,6 +214,18 @@ function setUpEnvironmentForPhase(node: AppNode, environment: Environment) {
       environment.phases[node.id].inputs[input.name] = inputValue;
       continue;
     }
+
+    const connectedEdge = edges.find(
+      (edge) => edge.target === node.id && edge.targetHandle === input.name,
+    );
+    if (!connectedEdge) continue;
+
+    const outputValue =
+      environment.phases[connectedEdge!.source].outputs[
+        connectedEdge!.sourceHandle!
+      ];
+
+    environment.phases[node.id].inputs[input.name] = outputValue;
   }
 }
 
