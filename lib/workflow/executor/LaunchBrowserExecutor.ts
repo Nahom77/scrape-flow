@@ -9,6 +9,7 @@ export async function LaunchBrowserExecutor(
     const websiteUrl = environment.getInput("Website Url");
     const browser = await puppeteer.launch({
       headless: false,
+      args: ["--disable-features=HttpsFirstBalancedModeAutoEnable"],
     });
 
     environment.setBrowser(browser);

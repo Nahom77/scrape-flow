@@ -36,8 +36,6 @@ export async function ExecuteWorkflow(executionId: string) {
   await initializeWorkflowExecution(executionId, execution.workflowId);
   await initializePhaseStatuses(execution);
 
-  const logCollector = createLogCollector()
-
   let creditsConsumed = 0;
   let executionFailed = false;
 
@@ -47,8 +45,7 @@ export async function ExecuteWorkflow(executionId: string) {
     const phaseExecution = await executeWorkflowPhase(
       phase,
       environment,
-      edges, 
-      logCollector
+      edges,
     );
     if (!phaseExecution.success) {
       executionFailed = true;
@@ -144,8 +141,8 @@ async function executeWorkflowPhase(
   phase: ExecutionPhase,
   environment: Environment,
   edges: Edge[],
-  logCollector: LogCollector
 ) {
+  const logCollector = createLogCollector();
   const startedAt = new Date();
   const node = JSON.parse(phase.node) as AppNode;
 
@@ -162,17 +159,22 @@ async function executeWorkflowPhase(
     },
   });
 
-  const creditsRequried = TaskRegistry[node.data.type].credits;
+  // const creditsRequried = TaskRegistry[node.data.type].credits;
   console.log(`executing phase ${phase.name}`);
 
   const success = await executePhase(phase, node, environment, logCollector);
 
   const outputs = environment.phases[node.id].outputs;
-  await finalizePhase(phase.id, success, outputs);
+  await finalizePhase(phase.id, success, outputs, logCollector);
   return { success };
 }
 
-async function finalizePhase(phaseId: string, success: boolean, outputs: any) {
+async function finalizePhase(
+  phaseId: string,
+  success: boolean,
+  outputs: any,
+  logCollector: LogCollector,
+) {
   const finalStatus = success
     ? ExecutionPhaseStatus.COMPLETED
     : ExecutionPhaseStatus.FAILED;
@@ -185,6 +187,15 @@ async function finalizePhase(phaseId: string, success: boolean, outputs: any) {
       status: finalStatus,
       completedAt: new Date(),
       outputs: JSON.stringify(outputs),
+      logs: {
+        createMany: {
+          data: logCollector.getAll().map((log) => ({
+            message: log.message,
+            timestamp: log.timestamp,
+            logLevel: log.level,
+          })),
+        },
+      },
     },
   });
 }
@@ -193,7 +204,7 @@ async function executePhase(
   phase: ExecutionPhase,
   node: AppNode,
   environment: Environment,
-  logCollector: LogCollector
+  logCollector: LogCollector,
 ): Promise<boolean> {
   const runFn = ExecutorRegistry[node.data.type];
   if (!runFn) {
@@ -236,7 +247,11 @@ function setUpEnvironmentForPhase(
   }
 }
 
-function createExecutionEnvironment(node: AppNode, environment: Environment, LogCollector: LogCollector) {
+function createExecutionEnvironment(
+  node: AppNode,
+  environment: Environment,
+  LogCollector: LogCollector,
+) {
   return {
     getInput: (name: string) => environment.phases[node.id].inputs[name],
     setOutput: (name: string, value: string) =>
@@ -248,7 +263,7 @@ function createExecutionEnvironment(node: AppNode, environment: Environment, Log
     getPage: () => environment.page,
     setPage: (page: Page) => (environment.page = page),
 
-    log: LogCollector
+    log: LogCollector,
   };
 }
 
