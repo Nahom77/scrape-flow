@@ -12,10 +12,14 @@ export async function LaunchBrowserExecutor(
       args: ["--disable-features=HttpsFirstBalancedModeAutoEnable"],
     });
 
+    environment.log.info("Browser started successfully");
+
     environment.setBrowser(browser);
     const page = await browser.newPage();
     await page.goto(websiteUrl);
     environment.setPage(page);
+
+    environment.log.info(`Opened page at: ${websiteUrl}`);
 
     return true;
   } catch (error: any) {
