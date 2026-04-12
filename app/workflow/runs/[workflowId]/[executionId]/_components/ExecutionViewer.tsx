@@ -3,6 +3,14 @@ import { GetWorkflowExecutionWithPhases } from "@/actions/workflows/getWorkflowE
 import { GetWorkflowPhaseDetails } from "@/actions/workflows/getWorkflowPhaseDetails";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { DatesToDurationString } from "@/lib/helper/date";
 import { GetPhasesTotalCost } from "@/lib/helper/phases";
@@ -146,6 +154,12 @@ function ExecutionViewer({ initialData }: { initialData: ExecutionData }) {
                 </span>
               </Badge>
             </div>
+
+            <ParameterViewer
+              title="Inputs"
+              subTitle="Inputs used for this phase"
+              paramJson={PhaseDetails.inputs}
+            />
           </div>
         )}
       </div>
@@ -175,5 +189,51 @@ function ExecutionLabel({
         {value}
       </div>
     </div>
+  );
+}
+
+function ParameterViewer({
+  title,
+  subTitle,
+  paramJson,
+}: {
+  title: string;
+  subTitle: string;
+  paramJson: string | null;
+}) {
+  const params = paramJson ? JSON.parse(paramJson) : undefined;
+  return (
+    <Card className="overflow-hidden pt-0">
+      <CardHeader className="py-4 bg-gray-50 dark:bg-background border-b rounded-lg rounded-b-none">
+        <CardTitle className="text-base">{title}</CardTitle>
+        <CardDescription className="text-muted-foreground text-sm">
+          {subTitle}
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="py-4">
+        <div className="flex flex-col gap-2">
+          {(!params || Object.keys(params).length === 0) && (
+            <p className="text-sm">No Parameters generated for this phase.</p>
+          )}
+
+          {params &&
+            Object.entries(params).map(([key, value]) => (
+              <div
+                className="flex justify-between items-centeer space-y-1"
+                key={key}
+              >
+                <p className="flex-1 text-muted-foreground text-sm basis-1/3">
+                  {key}
+                </p>
+                <Input
+                  readOnly
+                  className="flex-1 basis-2/3"
+                  value={value as string}
+                />
+              </div>
+            ))}
+        </div>
+      </CardContent>
+    </Card>
   );
 }
