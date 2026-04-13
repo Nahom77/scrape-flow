@@ -68,11 +68,10 @@ function ExecutionViewer({ initialData }: { initialData: ExecutionData }) {
   useEffect(() => {
     const phases = data?.phases || [];
     if (isRunning) {
-      for (const phase of phases) {
-        if (phase.status === ExecutionPhaseStatus.RUNNING) {
-          setSelectedPhase(phase.id);
-        }
-      }
+      const phaseToSelect = phases.toSorted((a, b) =>
+        a.startedAt! > b.startedAt! ? -1 : 1,
+      )[0];
+      setSelectedPhase(phaseToSelect.id);
     }
 
     const phaseToSelect = phases.toSorted((a, b) =>
