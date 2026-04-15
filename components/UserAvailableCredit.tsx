@@ -6,6 +6,8 @@ import { useQuery } from "@tanstack/react-query";
 import { CoinsIcon, Loader2Icon } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import ReactCountUpWrapper from "./ReactCountUpWrapper";
+import { buttonVariants } from "./ui/button";
 
 function UserAvailableCreditBadge() {
   const { data, isLoading } = useQuery({
@@ -15,11 +17,17 @@ function UserAvailableCreditBadge() {
   });
 
   return (
-    <Link href={"/billing"} className={cn("w-full items-center space-x-2")}>
+    <Link
+      href={"/billing"}
+      className={cn(
+        "w-full items-center space-x-2",
+        buttonVariants({ variant: "outline" }),
+      )}
+    >
       <CoinsIcon size={20} className="text-primary" />
       <span className="font-semibold capitalize">
         {isLoading && <Loader2Icon className="size-4 animate-spin" />}
-        {!isLoading && data && data}
+        {!isLoading && data && <ReactCountUpWrapper value={data} />}
         {!isLoading && !data && "-"}
       </span>
     </Link>

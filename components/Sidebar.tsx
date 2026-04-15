@@ -103,6 +103,7 @@ export function MobileSidebar() {
           <SheetContent className="w-80 sm:w-135 p-3 space-y-4" side={"left"}>
             <SheetHeader className="p-0">
               <Logo />
+              <UserAvailableCreditBadge />
               <SheetTitle className="hidden">MobileSidebar</SheetTitle>
               <SheetDescription className="hidden">
                 MobileSidebar
