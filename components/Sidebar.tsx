@@ -20,6 +20,7 @@ import {
   SheetTrigger,
 } from "./ui/sheet";
 import { useState } from "react";
+import UserAvailableCreditBadge from "./UserAvailableCredit";
 
 export const routes = [
   {
@@ -57,7 +58,9 @@ function DesktopSidebar() {
         <Logo />
       </div>
 
-      <div className="p-2">TODO CREDITS</div>
+      <div className="p-2">
+        <UserAvailableCreditBadge />
+      </div>
 
       <div className="p-2 flex flex-col gap-1">
         {routes.map((route) => (
