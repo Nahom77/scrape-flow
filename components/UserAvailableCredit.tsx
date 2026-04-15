@@ -28,7 +28,7 @@ function UserAvailableCreditBadge() {
       <span className="font-semibold capitalize">
         {isLoading && <Loader2Icon className="size-4 animate-spin" />}
         {!isLoading && data && <ReactCountUpWrapper value={data} />}
-        {!isLoading && !data && "-"}
+        {!isLoading && (data ?? "-")}
       </span>
     </Link>
   );
