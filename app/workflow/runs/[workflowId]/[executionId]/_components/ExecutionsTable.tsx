@@ -12,6 +12,9 @@ import {
 } from "@/components/ui/table";
 import { DatesToDurationString } from "@/lib/helper/date";
 import { useQuery } from "@tanstack/react-query";
+import ExecutionStatusIndicator from "./ExecutionStatusIndicator";
+import { WorkflowExecutionStatus } from "@/types/workflow.type";
+import { Loader2Icon } from "lucide-react";
 
 type InitialDataType = Awaited<ReturnType<typeof GetWorkflowExecutions>>;
 
@@ -59,9 +62,22 @@ function ExecutionsTable({
                   </div>
                 </TableCell>
                 <TableCell>
-                  <div className="">
-                    <div className="">{execution.status}</div>
-                    <div className="">{duration}</div>
+                  <div className="flex items-center gap-2">
+                    <div className="">
+                      <ExecutionStatusIndicator
+                        status={execution.status as WorkflowExecutionStatus}
+                      />
+                    </div>
+                    <div className="">
+                      {execution.status === WorkflowExecutionStatus.RUNNING ? (
+                        <Loader2Icon
+                          size={23}
+                          className="stroke-primary animate-spin"
+                        />
+                      ) : (
+                        duration
+                      )}
+                    </div>
                   </div>
                 </TableCell>
               </TableRow>
