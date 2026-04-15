@@ -60,5 +60,9 @@ async function ExecutionsTableWrapper({ workflowId }: { workflowId: string }) {
     );
   }
 
-  return <ExecutionsTable workflowId={workflowId} initialData={executions} />;
+  return (
+    <div className="w-full mx-auto py-6 container">
+      <ExecutionsTable workflowId={workflowId} initialData={executions} />;
+    </div>
+  );
 }
