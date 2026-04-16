@@ -13,7 +13,7 @@ export async function UpdateWorkflowCron({
 }) {
   try {
     const session = await getServerSession();
-    if (session?.user) {
+    if (!session?.user) {
       throw new Error("unauthenticated");
     }
 

@@ -71,6 +71,7 @@ function WorkflowCard({ workflow }: { workflow: Workflow }) {
             <ScheduleSection
               isDraft={isDraft}
               creditsCost={workflow.creditsCost}
+              workflowId={workflow.id}
             />
           </div>
         </div>
@@ -143,14 +144,16 @@ function WorkflowActions({
 function ScheduleSection({
   isDraft,
   creditsCost,
+  workflowId,
 }: {
   isDraft: boolean;
   creditsCost: number;
+  workflowId: string;
 }) {
   return (
     <div className="flex items-center gap-2">
       <CornerDownRight className="size-4 text-muted-foreground" />
-      <SchedulerDialog />
+      <SchedulerDialog workflowId={workflowId} />
       <MoveRightIcon className="size-4 text-muted-foreground" />
       <TooltipWrapper content="Credit consumption for full run">
         <div className="flex items-center gap-3">
