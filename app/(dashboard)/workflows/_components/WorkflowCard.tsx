@@ -16,8 +16,11 @@ import { Workflow } from "@/generated/prisma/client";
 import { cn } from "@/lib/utils";
 import { WorkflowStatus } from "@/types/workflow.type";
 import {
+  CoinsIcon,
+  CornerDownRight,
   FileTextIcon,
   MoreVerticalIcon,
+  MoveRightIcon,
   PlayIcon,
   ShuffleIcon,
   TrashIcon,
@@ -26,6 +29,7 @@ import Link from "next/link";
 import { useState } from "react";
 import DeleteWorkflowDialog from "./DeleteWorkflowDialog";
 import RunBtn from "./RunBtn";
+import SchedulerDialog from "./SchedulerDialog";
 
 const statusColors = {
   [WorkflowStatus.DRAFT]: "bg-yellow-400 text-yellow-600",
@@ -64,6 +68,10 @@ function WorkflowCard({ workflow }: { workflow: Workflow }) {
                 </Badge>
               )}
             </h3>
+            <ScheduleSection
+              isDraft={isDraft}
+              creditsCost={workflow.creditsCost}
+            />
           </div>
         </div>
 
@@ -129,6 +137,33 @@ function WorkflowActions({
         </DropdownMenuContent>
       </DropdownMenu>
     </>
+  );
+}
+
+function ScheduleSection({
+  isDraft,
+  creditsCost,
+}: {
+  isDraft: boolean;
+  creditsCost: number;
+}) {
+  return (
+    <div className="flex items-center gap-2">
+      <CornerDownRight className="size-4 text-muted-foreground" />
+      <SchedulerDialog />
+      <MoveRightIcon className="size-4 text-muted-foreground" />
+      <TooltipWrapper content="Credit consumption for full run">
+        <div className="flex items-center gap-3">
+          <Badge
+            variant={"outline"}
+            className="space-x-2 rounded-sm text-muted-foreground"
+          >
+            <CoinsIcon className="size-4" />
+            <span className="">{creditsCost}</span>
+          </Badge>
+        </div>
+      </TooltipWrapper>
+    </div>
   );
 }
 
