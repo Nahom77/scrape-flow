@@ -4,6 +4,7 @@ import { ThemeProvider } from "next-themes";
 import { ReactNode, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import NextTopLoader from "nextjs-toploader";
 
 function AppProviders({ children }: { children: ReactNode }) {
   const [queryClient] = useState(
@@ -18,6 +19,7 @@ function AppProviders({ children }: { children: ReactNode }) {
   );
   return (
     <QueryClientProvider client={queryClient}>
+      <NextTopLoader color="#10b981" showSpinner={false} />
       <ThemeProvider
         attribute="class"
         defaultTheme="system"
