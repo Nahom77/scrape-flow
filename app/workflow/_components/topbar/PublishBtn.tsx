@@ -26,8 +26,6 @@ function PublishBtn({ workflowId }: { workflowId: string }) {
       variant={"outline"}
       onClick={() => {
         const plan = generate();
-        console.log("---Plan---");
-        console.table(plan);
         if (!plan) {
           return;
         }
