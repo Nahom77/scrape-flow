@@ -10,6 +10,7 @@ import {
   WorkflowExecutionPlan,
   WorkflowExecutionStatus,
   WorkflowExecutionTrigger,
+  WorkflowStatus,
 } from "@/types/workflow.type";
 
 export async function RunWorkflow(form: {
@@ -52,6 +53,28 @@ export async function RunWorkflow(form: {
   }
 
   executionPlan = result.executionPlan;
+  if (workflow.status === WorkflowStatus.PUBLISHED) {
+    if (!workflow.executionPlan) {
+      throw new Error("No execution plan found in published workflow");
+    }
+    executionPlan = JSON.parse(workflow.executionPlan!);
+  } else {
+    if (!flowDefinition) {
+      throw new Error("flow definition is not defined");
+    }
+
+    const flow = JSON.parse(flowDefinition);
+    const result = FlowToExecutionPlan(flow.nodes, flow.edges);
+    if (result.error) {
+      throw new Error("flow definition not valid");
+    }
+
+    if (!result.executionPlan) {
+      throw new Error("Execution plan not generated");
+    }
+
+    executionPlan = result.executionPlan;
+  }
 
   const execution = await prisma.workflowExecution.create({
     data: {

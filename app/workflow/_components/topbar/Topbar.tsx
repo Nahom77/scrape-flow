@@ -14,9 +14,16 @@ interface Props {
   subtitle?: string;
   workflowId: string;
   hideButtons?: boolean;
+  isPublished: boolean;
 }
 
-function Topbar({ title, subtitle, workflowId, hideButtons = false }: Props) {
+function Topbar({
+  title,
+  subtitle,
+  workflowId,
+  hideButtons = false,
+  isPublished,
+}: Props) {
   const router = useRouter();
   return (
     <header className="w-full h-15 p-2 flex justify-between top-0 z-10 sticky bg-background border-b-2 border-separate">
@@ -40,8 +47,12 @@ function Topbar({ title, subtitle, workflowId, hideButtons = false }: Props) {
         {!hideButtons && (
           <>
             <ExecuteBtn workflowId={workflowId} />
-            <SaveBtn workflowId={workflowId} />
-            <PublishBtn workflowId={workflowId} />
+            {!isPublished && (
+              <>
+                <SaveBtn workflowId={workflowId} />
+                <PublishBtn workflowId={workflowId} />
+              </>
+            )}
           </>
         )}
       </div>

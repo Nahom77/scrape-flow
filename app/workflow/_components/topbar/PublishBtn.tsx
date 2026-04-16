@@ -15,10 +15,10 @@ function PublishBtn({ workflowId }: { workflowId: string }) {
   const { mutate, isPending } = useMutation({
     mutationFn: PublishWorkflow,
     onSuccess: () => {
-      toast.success("Execution started", { id: "flow-execution" });
+      toast.success("Workflow Published", { id: workflowId });
     },
     onError: () => {
-      toast.error("Something went wrong", { id: "flow-execution" });
+      toast.error("Something went wrong", { id: workflowId });
     },
   });
   return (
@@ -31,7 +31,7 @@ function PublishBtn({ workflowId }: { workflowId: string }) {
         if (!plan) {
           return;
         }
-
+        toast.loading("Publishing workflow ...", { id: workflowId });
         mutate({
           id: workflowId,
           flowDefinition: JSON.stringify(toObject()),
