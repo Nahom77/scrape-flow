@@ -43,7 +43,7 @@ function Topbar({
           )}
         </div>
       </div>
-      <NavigationTabs workflowId={workflowId} />
+      {!hideButtons && <NavigationTabs workflowId={workflowId} />}
       <div className="flex flex-1 justify-end gap-1">
         {!hideButtons && (
           <>
