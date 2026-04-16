@@ -1,21 +1,16 @@
 "use client";
 
-import { PublishWorkflow } from "@/actions/workflows/publishWorkflow";
+import { UnpublishWorkflow } from "@/actions/workflows/unpublishWorklow";
 import { Button } from "@/components/ui/button";
-import useExecutionPlan from "@/hooks/useExecutionPlan";
 import { useMutation } from "@tanstack/react-query";
-import { useReactFlow } from "@xyflow/react";
-import { UploadIcon } from "lucide-react";
+import { DownloadIcon } from "lucide-react";
 import { toast } from "sonner";
 
 function UnpublishBtn({ workflowId }: { workflowId: string }) {
-  const generate = useExecutionPlan();
-  const { toObject } = useReactFlow();
-
   const { mutate, isPending } = useMutation({
-    mutationFn: PublishWorkflow,
+    mutationFn: UnpublishWorkflow,
     onSuccess: () => {
-      toast.success("Workflow Published", { id: workflowId });
+      toast.success("Workflow UnPublished", { id: workflowId });
     },
     onError: () => {
       toast.error("Something went wrong", { id: workflowId });
@@ -25,21 +20,12 @@ function UnpublishBtn({ workflowId }: { workflowId: string }) {
     <Button
       variant={"outline"}
       onClick={() => {
-        const plan = generate();
-        console.log("---Plan---");
-        console.table(plan);
-        if (!plan) {
-          return;
-        }
-        toast.loading("Publishing workflow ...", { id: workflowId });
-        mutate({
-          id: workflowId,
-          flowDefinition: JSON.stringify(toObject()),
-        });
+        toast.loading("UnPublishing workflow ...", { id: workflowId });
+        mutate(workflowId);
       }}
       disabled={isPending}
     >
-      <UploadIcon size={16} className="stroke-green-400" />
+      <DownloadIcon size={16} className="stroke-orange-400" />
       Unpublish
     </Button>
   );
