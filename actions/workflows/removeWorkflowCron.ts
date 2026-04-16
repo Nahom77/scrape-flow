@@ -2,6 +2,7 @@
 
 import { getServerSession } from "@/lib/get-session";
 import prisma from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
 
 export async function RemoveWorkflowCron(id: string) {
   const session = await getServerSession();
@@ -19,4 +20,6 @@ export async function RemoveWorkflowCron(id: string) {
       nextRunAt: null,
     },
   });
+
+  revalidatePath("/workflows");
 }

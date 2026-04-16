@@ -18,6 +18,7 @@ import { toast } from "sonner";
 import cronstrue from "cronstrue";
 import { cn } from "@/lib/utils";
 import CronExpressionParser from "cron-parser";
+import { RemoveWorkflowCron } from "@/actions/workflows/removeWorkflowCron";
 
 function SchedulerDialog(props: { workflowId: string; cron: string | null }) {
   const [cron, setCron] = useState(props.cron || "");
@@ -26,6 +27,15 @@ function SchedulerDialog(props: { workflowId: string; cron: string | null }) {
 
   const mutation = useMutation({
     mutationFn: UpdateWorkflowCron,
+    onSuccess: () => {
+      toast.success("Schedule updated successfully", { id: "cron" });
+    },
+    onError: () => {
+      toast.error("Something went wrong", { id: "cron" });
+    },
+  });
+  const removeCronMutation = useMutation({
+    mutationFn: RemoveWorkflowCron,
     onSuccess: () => {
       toast.success("Schedule updated successfully", { id: "cron" });
     },
@@ -46,7 +56,7 @@ function SchedulerDialog(props: { workflowId: string; cron: string | null }) {
     <Dialog>
       <DialogTrigger asChild>
         <Button variant={"link"} size={"sm"} className="h-auto p-0 text-sm">
-          {validCron ? (
+          {props.cron ? (
             <div className="flex items-center gap-2">
               <ClockIcon />
               {readableCron}
@@ -83,12 +93,28 @@ function SchedulerDialog(props: { workflowId: string; cron: string | null }) {
           >
             {validCron ? readableCron : "Not a valid cron expression"}
           </div>
+
+          {validCron && props.cron && (
+            <DialogClose asChild className="w-full">
+              <Button
+                className="border-destructive text-destructive"
+                variant={"outline"}
+                onClick={() => {
+                  toast.loading("Removing schedule", { id: "cron" });
+                  removeCronMutation.mutate(props.workflowId);
+                }}
+                disabled={mutation.isPending || removeCronMutation.isPending}
+              >
+                Remove current schedule
+              </Button>
+            </DialogClose>
+          )}
         </div>
-        <DialogFooter className="px-6 gap-2">
+        <DialogFooter className="px-6 flex sm:flex-col gap-2">
           <DialogClose asChild>
             <Button
               className=""
-              variant={"secondary"}
+              variant={"outline"}
               onClick={() => {
                 setCron(props.cron || "");
               }}
@@ -100,7 +126,7 @@ function SchedulerDialog(props: { workflowId: string; cron: string | null }) {
             <Button
               onClick={() => {
                 toast.loading("Saving", { id: "cron" });
-                console.log(cron);
+
                 mutation.mutate({
                   id: props.workflowId,
                   cron,
