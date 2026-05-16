@@ -7,6 +7,21 @@ export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql", // or "mysql", "postgresql", ...etc
   }),
+
+  databaseHooks: {
+    user: {
+      create: {
+        after: async (user) => {
+          await prisma.userBalance.create({
+            data: {
+              userId: user.id,
+            },
+          });
+        },
+      },
+    },
+  },
+
   emailAndPassword: {
     enabled: true,
   },
