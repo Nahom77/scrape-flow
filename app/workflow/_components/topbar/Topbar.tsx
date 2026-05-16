@@ -15,7 +15,7 @@ interface Props {
   subtitle?: string;
   workflowId: string;
   hideButtons?: boolean;
-  isPublished: boolean;
+  isPublished?: boolean;
 }
 
 function Topbar({
