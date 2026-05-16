@@ -17,4 +17,16 @@ const prisma =
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 
+// @ts-expect-error - to by pass the any issue
+prisma.$use(async (params, next) => {
+  const result = await next(params);
+  if (params.model === "User" && params.action === "create") {
+    // create balance row; credits has default 1000 in schema
+    await prisma.userBalance
+      .create({ data: { userId: result.id } })
+      .catch(() => {});
+  }
+  return result;
+});
+
 export default prisma;
