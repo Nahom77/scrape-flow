@@ -164,7 +164,7 @@ model ExecutionLog {
 
 model UserBalance {
   userId String @id @unique
-  credits Int @default(0)
+  credits Int @default(1000)
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
