@@ -5,7 +5,7 @@ import { AlertCircle, InboxIcon } from "lucide-react";
 import React, { Suspense } from "react";
 import CreateWorkflowDialog from "./_components/CreateWorkflowDialog";
 import WorkflowCard from "./_components/WorkflowCard";
-import { Metadata } from "next";
+// import { Metadata } from "next";
 
 // export const metadata: Metadata = {
 //   title: "Workflows",

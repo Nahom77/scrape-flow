@@ -14,11 +14,11 @@ function NotFoundPage() {
         </p>
         <div className="flex sm:flex-row flex-col justify-center gap-4">
           <Link
-            href={"/"}
+            href={"/workflows"}
             className="px-4 py-2 flex justify-center items-center bg-primary hover:bg-primary/80 rounded-md text-white transition-colors"
           >
             <ArrowLeft className="size-4 mr-2" />
-            Back to Dashboard
+            Back to Workflows
           </Link>
         </div>
       </div>

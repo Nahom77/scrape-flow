@@ -57,7 +57,7 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
         },
         {
           onSuccess: async () => {
-            router.push("/");
+            router.push("/workflows");
             toast.success("You have Successfully created an account");
           },
           onError: (ctx) => {
@@ -73,7 +73,7 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
       await authClient.signIn.social(
         {
           provider: "google",
-          callbackURL: "/",
+          callbackURL: "/workflows",
         },
         {
           onError: (ctx) => {

@@ -6,7 +6,7 @@ async function Layout({ children }: { children: ReactNode }) {
   const session = await getServerSession();
 
   if (session?.user) {
-    redirect("/"); // 🚀 server-side redirect
+    redirect("/workflows"); // 🚀 server-side redirect
   }
 
   return (

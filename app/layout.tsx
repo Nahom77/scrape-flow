@@ -1,29 +1,29 @@
-import type { Metadata } from "next";
+// import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import "./globals.css";
 import AppProviders from "@/components/providers/AppProviders";
 import { Toaster } from "@/components/ui/sonner";
-import CustomPathname from "./../hooks/usePathname";
-import { routes } from "@/components/Sidebar";
+// import CustomPathname from "./../hooks/usePathname";
+// import { routes } from "@/components/Sidebar";
 
 const fontSans = Outfit({
   subsets: ["latin"],
   variable: "--font-sans",
 });
 
-export async function GenerateMetadata(): Promise<Metadata> {
-  const pathname = CustomPathname();
-  const activeRoute =
-    routes.find(
-      (route) => route.href.length > 1 && pathname.includes(route.href),
-    ) || routes[0];
-  console.log(pathname);
+// export async function GenerateMetadata(): Promise<Metadata> {
+//   const pathname = CustomPathname();
+//   const activeRoute =
+//     routes.find(
+//       (route) => route.href.length > 1 && pathname.includes(route.href),
+//     ) || routes[0];
+//   console.log(pathname);
 
-  return {
-    title: "activeRoute.label",
-    description: "Edit Workflow",
-  };
-}
+//   return {
+//     title: "activeRoute.label",
+//     description: "Edit Workflow",
+//   };
+// }
 
 export default function RootLayout({
   children,

@@ -11,7 +11,7 @@ interface Props {
 function Logo({ fontSize = "text-2xl", iconSize = 20 }: Props) {
   return (
     <Link
-      href={"/"}
+      href={"/workflows"}
       className={cn(
         "flex items-center gap-2 font-extrabold text-2xl",
         fontSize,
