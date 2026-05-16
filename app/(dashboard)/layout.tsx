@@ -23,7 +23,12 @@ async function Layout({ children }: { children: ReactNode }) {
             <BreadcrumbHeader />
             <div className="flex items-center gap-1">
               <ModeToggle />
-              <UserAvatar user={session?.user} />
+              <UserAvatar
+                user={{
+                  ...session?.user,
+                  image: session?.user.image ?? undefined,
+                }}
+              />
             </div>
           </header>
           <Separator />
